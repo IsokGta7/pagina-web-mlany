@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: IsokGta7/pagina-web-mlany
+  name: git-gateway
   branch: master
 
 media_folder: public/uploads

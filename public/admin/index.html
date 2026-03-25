@@ -3,10 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex" />
+    <meta name="robots" content="noindex, nofollow" />
     <title>Administrador de contenido | Ciensite</title>
+    <!-- Widget de Netlify Identity para autenticación -->
+    <script
+      src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+      integrity="sha384-dy2tW8xkhLIj8lZR42MCwZhhDb2cCewZiw0uA65CMpdHiJzL+iubx7HzHcCXU2rW"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js"></script>
+    <!-- Decap CMS con integridad de subrecurso (SRI) -->
+    <script
+      src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"
+      integrity="sha384-Ch3bpZcxxjHMuIde+QMTyDdxGqjtafFkpoGgvLjf50nHhptNH7bZyPTyKSkOvEo+"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

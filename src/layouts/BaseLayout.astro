@@ -48,6 +48,9 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Netlify Identity: redirigir al admin tras aceptar invitación -->
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
     <!-- Modo oscuro: evitar parpadeo -->
     <script is:inline>
       if (
@@ -60,6 +63,19 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
   </head>
   <body class="min-h-screen flex flex-col antialiased">
     <slot />
+
+    <!-- Redirigir al admin tras login con Netlify Identity -->
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
 
     <!-- Animaciones de scroll con Intersection Observer -->
     <script is:inline>
