@@ -1,0 +1,2 @@
+# Redirigir admin sin trailing slash
+/admin  /admin/  301

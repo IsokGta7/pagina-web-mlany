@@ -138,25 +138,51 @@ const instagramPosts = [
   <Footer />
 
   <script is:inline define:vars={{ photos }}>
-    // Lightbox vanilla JS
+    // Lightbox vanilla JS con focus trap
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const triggers = document.querySelectorAll('.lightbox-trigger');
     let currentIndex = 0;
+    let lastFocusedElement = null;
+
+    // Elementos enfocables dentro del lightbox
+    const focusableSelector = 'button, [href], [tabindex]:not([tabindex="-1"])';
+
+    function trapFocus(e) {
+      if (!lightbox || lightbox.classList.contains('hidden')) return;
+      const focusable = lightbox.querySelectorAll(focusableSelector);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
 
     function openLightbox(index) {
       currentIndex = index;
+      lastFocusedElement = document.activeElement;
       lightboxImg.src = photos[index].src;
       lightboxImg.alt = photos[index].alt;
       lightbox.classList.remove('hidden');
       lightbox.classList.add('flex');
       document.body.style.overflow = 'hidden';
+      document.getElementById('lightbox-close')?.focus();
+      document.addEventListener('keydown', trapFocus);
     }
 
     function closeLightbox() {
       lightbox.classList.add('hidden');
       lightbox.classList.remove('flex');
       document.body.style.overflow = '';
+      document.removeEventListener('keydown', trapFocus);
+      lastFocusedElement?.focus();
     }
 
     function navigate(direction) {

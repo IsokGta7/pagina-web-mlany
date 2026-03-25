@@ -100,10 +100,10 @@ import Footer from '../components/Footer.astro';
           </form>
 
           <!-- Mensajes de estado -->
-          <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-teal/10 text-teal text-sm font-medium">
+          <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-teal/10 text-teal text-sm font-medium" role="status" aria-live="polite">
             ¡Mensaje enviado con éxito! Te responderemos pronto.
           </div>
-          <div id="form-error" class="hidden mt-4 p-4 rounded-xl bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-medium">
+          <div id="form-error" class="hidden mt-4 p-4 rounded-xl bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-medium" role="alert" aria-live="assertive">
             Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.
           </div>
         </div>
@@ -150,11 +150,18 @@ import Footer from '../components/Footer.astro';
     const form = document.getElementById('contact-form');
     const success = document.getElementById('form-success');
     const error = document.getElementById('form-error');
+    const submitBtn = form?.querySelector('button[type="submit"]');
 
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       success?.classList.add('hidden');
       error?.classList.add('hidden');
+
+      // Deshabilitar botón mientras se envía
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+      }
 
       try {
         const formData = new FormData(form);
@@ -172,6 +179,11 @@ import Footer from '../components/Footer.astro';
         }
       } catch {
         error?.classList.remove('hidden');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar mensaje';
+        }
       }
     });
   </script>

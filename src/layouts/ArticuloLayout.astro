@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
 import { getCollection } from 'astro:content';
+import { estimateReadTime } from '../utils/readTime';
 
 interface Props {
   title: string;
@@ -40,7 +41,7 @@ const encodedTitle = encodeURIComponent(title);
   <Header />
 
   <main class="flex-1">
-    <article class="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+    <article class="max-w-3xl mx-auto px-4 py-12 sm:py-16" data-pagefind-body>
       <!-- Encabezado del artículo -->
       <header class="mb-8">
         <span
@@ -122,6 +123,7 @@ const encodedTitle = encodeURIComponent(title);
               category={articulo.data.category}
               coverImage={articulo.data.coverImage}
               slug={articulo.id}
+              readTime={estimateReadTime(articulo.body ?? '')}
             />
           ))}
         </div>

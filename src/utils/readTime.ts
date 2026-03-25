@@ -1,0 +1,5 @@
+/** Estima el tiempo de lectura en minutos (~200 palabras/minuto) */
+export function estimateReadTime(text: string): number {
+  const words = text.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}

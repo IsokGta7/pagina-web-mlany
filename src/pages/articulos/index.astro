@@ -5,9 +5,17 @@ import Footer from '../../components/Footer.astro';
 import ArticuloCard from '../../components/ArticuloCard.astro';
 import SearchBar from '../../components/SearchBar.astro';
 import { getCollection } from 'astro:content';
+import { estimateReadTime } from '../../utils/readTime';
 
-const allArticulos = (await getCollection('articulos'))
+const rawArticulos = (await getCollection('articulos'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const allArticulos = await Promise.all(
+  rawArticulos.map(async (a) => {
+    const body = a.body ?? '';
+    return { ...a, readTime: estimateReadTime(body) };
+  })
+);
 
 const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 'Medio Ambiente'];
 
@@ -57,6 +65,7 @@ const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 
               category={articulo.data.category}
               coverImage={articulo.data.coverImage}
               slug={articulo.id}
+              readTime={articulo.readTime}
             />
           </div>
         ))}
