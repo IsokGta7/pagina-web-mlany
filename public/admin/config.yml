@@ -1,7 +1,7 @@
 backend:
   name: github
-  repo: usuario/ciensite # Reemplazar con el repositorio real
-  branch: main
+  repo: IsokGta7/pagina-web-mlany
+  branch: master
 
 media_folder: public/uploads
 public_folder: /uploads
