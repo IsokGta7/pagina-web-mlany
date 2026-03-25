@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Fuentes: Inter (UI) + Lora (encabezados) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/lora/v35/0QI6MX1D_JOuGQbT0gvTJPa787weuxJBkq0.woff2') format('woff2');
+}
+
+/* Tema personalizado */
+@theme {
+  --color-navy: #0A1628;
+  --color-navy-light: #122240;
+  --color-teal: #00C2A8;
+  --color-teal-dark: #00A38D;
+  --color-warm-white: #F8F7F4;
+  --color-gray-100: #F1F0ED;
+  --color-gray-200: #E2E1DE;
+  --color-gray-300: #C8C7C4;
+  --color-gray-400: #9E9D9A;
+  --color-gray-500: #6B6A67;
+  --color-gray-600: #4A4946;
+  --color-gray-700: #333230;
+  --color-gray-800: #1F1E1C;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Lora', ui-serif, Georgia, serif;
+}
+
+/* Estilos base */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-warm-white);
+  color: var(--color-gray-700);
+  line-height: 1.7;
+}
+
+/* Modo oscuro */
+html.dark body {
+  background-color: var(--color-navy);
+  color: var(--color-gray-200);
+}
+
+/* Animaciones de scroll */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tipografía para artículos */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-serif);
+  color: var(--color-navy);
+}
+
+html.dark .prose h1,
+html.dark .prose h2,
+html.dark .prose h3,
+html.dark .prose h4 {
+  color: var(--color-warm-white);
+}
+
+html.dark .prose {
+  color: var(--color-gray-200);
+}
+
+html.dark .prose strong {
+  color: var(--color-warm-white);
+}
+
+html.dark .prose a {
+  color: var(--color-teal);
+}

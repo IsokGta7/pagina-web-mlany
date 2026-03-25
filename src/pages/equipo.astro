@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TeamCard from '../components/TeamCard.astro';
+import { getCollection } from 'astro:content';
+
+const equipo = (await getCollection('equipo'))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<BaseLayout title="Equipo" description="Conoce al equipo detrás de Ciensite. Estudiantes mexicanos apasionados por la divulgación científica.">
+  <Header />
+
+  <main class="flex-1">
+    <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+      <div class="text-center mb-12 fade-in">
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
+          Nuestro equipo
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+          Somos estudiantes de diversas universidades mexicanas unidos por la pasión de comunicar la ciencia.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 fade-in">
+        {equipo.map((member) => (
+          <TeamCard
+            name={member.data.name}
+            role={member.data.role}
+            bio={member.data.bio}
+            photo={member.data.photo}
+            socialLinks={member.data.socialLinks}
+          />
+        ))}
+      </div>
+
+      <!-- Llamada a la acción -->
+      <div class="text-center mt-16 p-8 bg-gray-100 dark:bg-navy-light rounded-2xl fade-in">
+        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-3">
+          ¿Quieres unirte?
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          Si eres estudiante y te apasiona la ciencia, nos encantaría tenerte en el equipo.
+        </p>
+        <a
+          href="/contacto/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors"
+        >
+          Contáctanos
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

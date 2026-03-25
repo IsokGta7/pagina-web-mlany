@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Contacto" description="Escríbenos para colaboraciones, preguntas o sugerencias. Queremos saber de ti.">
+  <Header />
+
+  <main class="flex-1">
+    <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+      <div class="text-center mb-12 fade-in">
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
+          Contacto
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+          ¿Tienes una pregunta, sugerencia o propuesta de colaboración? Nos encantaría escucharte.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <!-- Formulario -->
+        <div class="fade-in">
+          <form
+            id="contact-form"
+            name="contacto"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            class="space-y-5"
+          >
+            <!-- Campo oculto para Netlify -->
+            <input type="hidden" name="form-name" value="contacto" />
+            <p class="hidden">
+              <label>No llenar: <input name="bot-field" /></label>
+            </p>
+
+            <div>
+              <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Nombre
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors"
+                placeholder="Tu nombre completo"
+              />
+            </div>
+
+            <div>
+              <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Correo electrónico
+              </label>
+              <input
+                type="email"
+                id="correo"
+                name="correo"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors"
+                placeholder="tu@correo.com"
+              />
+            </div>
+
+            <div>
+              <label for="asunto" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Asunto
+              </label>
+              <input
+                type="text"
+                id="asunto"
+                name="asunto"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors"
+                placeholder="¿De qué quieres hablar?"
+              />
+            </div>
+
+            <div>
+              <label for="mensaje" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Mensaje
+              </label>
+              <textarea
+                id="mensaje"
+                name="mensaje"
+                rows="5"
+                required
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors resize-y"
+                placeholder="Escribe tu mensaje aquí..."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full sm:w-auto px-8 py-3 rounded-xl bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors cursor-pointer"
+            >
+              Enviar mensaje
+            </button>
+          </form>
+
+          <!-- Mensajes de estado -->
+          <div id="form-success" class="hidden mt-4 p-4 rounded-xl bg-teal/10 text-teal text-sm font-medium">
+            ¡Mensaje enviado con éxito! Te responderemos pronto.
+          </div>
+          <div id="form-error" class="hidden mt-4 p-4 rounded-xl bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-medium">
+            Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.
+          </div>
+        </div>
+
+        <!-- Mapa e información -->
+        <div class="space-y-6 fade-in">
+          <div class="bg-white dark:bg-navy-light rounded-2xl p-6 shadow-sm">
+            <h2 class="font-serif text-xl font-bold text-navy dark:text-warm-white mb-4">Encuéntranos</h2>
+            <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-teal mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Ciudad de México, México</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-teal mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <span>contacto@ciensite.mx</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-teal mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                <span>@ciensite.mx</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mapa -->
+          <div class="rounded-2xl overflow-hidden shadow-sm h-64 lg:h-80">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d240894.26002285256!2d-99.27362699999999!3d19.3909832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ce0026db097507%3A0x54061076265ee841!2sCiudad%20de%20M%C3%A9xico%2C%20CDMX!5e0!3m2!1ses!2smx!4v1"
+              class="w-full h-full border-0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Ubicación de Ciensite en Ciudad de México"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script is:inline>
+    // Envío de formulario sin recarga
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+    const error = document.getElementById('form-error');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      success?.classList.add('hidden');
+      error?.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString(),
+        });
+
+        if (response.ok) {
+          success?.classList.remove('hidden');
+          form.reset();
+        } else {
+          error?.classList.remove('hidden');
+        }
+      } catch {
+        error?.classList.remove('hidden');
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+// Componente de búsqueda integrado con Pagefind
+---
+
+<div class="relative" id="search-container">
+  <div class="relative">
+    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    </svg>
+    <input
+      type="search"
+      id="search-input"
+      placeholder="Buscar artículos..."
+      class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors text-sm"
+      aria-label="Buscar artículos"
+      autocomplete="off"
+    />
+  </div>
+  <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-navy-light rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 max-h-80 overflow-y-auto z-50 hidden">
+  </div>
+</div>
+
+<script is:inline>
+  // Inicializar Pagefind cuando esté disponible
+  (async () => {
+    const input = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+    if (!input || !resultsContainer) return;
+
+    let pagefind;
+    try {
+      pagefind = await import('/pagefind/pagefind.js');
+      await pagefind.init();
+    } catch {
+      // Pagefind no disponible en desarrollo
+      return;
+    }
+
+    let debounceTimer;
+
+    input.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      const query = e.target.value.trim();
+
+      if (!query) {
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        return;
+      }
+
+      debounceTimer = setTimeout(async () => {
+        const search = await pagefind.search(query);
+        const results = await Promise.all(search.results.slice(0, 6).map(r => r.data()));
+
+        if (results.length === 0) {
+          resultsContainer.innerHTML = '<p class="p-4 text-sm text-gray-500">No se encontraron resultados.</p>';
+        } else {
+          resultsContainer.innerHTML = results.map(r => `
+            <a href="${r.url}" class="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-navy border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors">
+              <p class="text-sm font-medium text-navy dark:text-warm-white">${r.meta?.title || 'Sin título'}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${r.excerpt}</p>
+            </a>
+          `).join('');
+        }
+
+        resultsContainer.classList.remove('hidden');
+      }, 200);
+    });
+
+    // Cerrar resultados al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('search-container')?.contains(e.target)) {
+        resultsContainer.classList.add('hidden');
+      }
+    });
+  })();
+</script>

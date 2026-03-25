@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import InstagramEmbed from '../components/InstagramEmbed.astro';
+
+// Videos de YouTube de ejemplo (IDs de placeholder)
+const videos = [
+  { id: 'dQw4w9WgXcQ', title: '¿Qué es la materia oscura?' },
+  { id: 'dQw4w9WgXcQ', title: 'Cómo funciona el ADN' },
+  { id: 'dQw4w9WgXcQ', title: 'La física de los agujeros negros' },
+  { id: 'dQw4w9WgXcQ', title: 'Cambio climático explicado' },
+];
+
+// Galería de fotos
+const photos = [
+  { src: 'https://picsum.photos/seed/lab1/600/400', alt: 'Laboratorio de química' },
+  { src: 'https://picsum.photos/seed/lab2/600/400', alt: 'Equipo de trabajo en campo' },
+  { src: 'https://picsum.photos/seed/lab3/400/600', alt: 'Microscopio electrónico' },
+  { src: 'https://picsum.photos/seed/lab4/600/400', alt: 'Presentación en congreso' },
+  { src: 'https://picsum.photos/seed/lab5/400/600', alt: 'Muestras de laboratorio' },
+  { src: 'https://picsum.photos/seed/lab6/600/400', alt: 'Taller de divulgación' },
+];
+
+// Posts de Instagram (placeholders)
+const instagramPosts = [
+  'https://www.instagram.com/p/PLACEHOLDER1/',
+  'https://www.instagram.com/p/PLACEHOLDER2/',
+  'https://www.instagram.com/p/PLACEHOLDER3/',
+];
+---
+
+<BaseLayout title="Multimedia" description="Videos, fotos y contenido multimedia de Ciensite. Ciencia que se ve, se escucha y se comparte.">
+  <Header />
+
+  <main class="flex-1">
+    <!-- Videos -->
+    <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16 fade-in">
+      <div class="text-center mb-10">
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
+          Multimedia
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+          Contenido audiovisual para aprender ciencia de forma entretenida.
+        </p>
+      </div>
+
+      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Videos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+        {videos.map((video) => (
+          <div class="bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+            <div class="relative pb-[56.25%]">
+              <iframe
+                src={`https://www.youtube.com/embed/${video.id}`}
+                title={video.title}
+                class="absolute inset-0 w-full h-full"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h3 class="font-medium text-navy dark:text-warm-white">{video.title}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Galería -->
+    <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
+      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Galería</h2>
+      <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+        {photos.map((photo, i) => (
+          <button
+            class="lightbox-trigger block w-full rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer break-inside-avoid"
+            data-index={i}
+            type="button"
+            aria-label={`Ver imagen: ${photo.alt}`}
+          >
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Instagram -->
+    <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
+      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Instagram</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {instagramPosts.map((url) => (
+          <InstagramEmbed postUrl={url} />
+        ))}
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div
+      id="lightbox"
+      class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Visor de imagen"
+    >
+      <button
+        id="lightbox-close"
+        class="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+        aria-label="Cerrar visor"
+        type="button"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <button
+        id="lightbox-prev"
+        class="absolute left-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+        aria-label="Imagen anterior"
+        type="button"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg" />
+      <button
+        id="lightbox-next"
+        class="absolute right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+        aria-label="Imagen siguiente"
+        type="button"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <Footer />
+
+  <script is:inline define:vars={{ photos }}>
+    // Lightbox vanilla JS
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const triggers = document.querySelectorAll('.lightbox-trigger');
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxImg.src = photos[index].src;
+      lightboxImg.alt = photos[index].alt;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function navigate(direction) {
+      currentIndex = (currentIndex + direction + photos.length) % photos.length;
+      lightboxImg.src = photos[currentIndex].src;
+      lightboxImg.alt = photos[currentIndex].alt;
+    }
+
+    triggers.forEach((btn) => {
+      btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
+    });
+
+    document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev')?.addEventListener('click', () => navigate(-1));
+    document.getElementById('lightbox-next')?.addEventListener('click', () => navigate(1));
+
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox?.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,56 @@
+backend:
+  name: github
+  repo: usuario/ciensite # Reemplazar con el repositorio real
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+locale: es
+
+collections:
+  - name: articulos
+    label: Artículos
+    folder: src/content/articulos
+    create: true
+    extension: mdx
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: title, widget: string }
+      - { label: "Descripción", name: description, widget: text }
+      - { label: "Fecha de publicación", name: date, widget: datetime, format: "YYYY-MM-DD" }
+      - label: "Categoría"
+        name: category
+        widget: select
+        options:
+          - Biología
+          - Física
+          - Química
+          - Tecnología
+          - Medio Ambiente
+      - { label: "Imagen de portada", name: coverImage, widget: image }
+      - { label: "Autor", name: author, widget: string }
+      - { label: "Contenido", name: body, widget: markdown }
+
+  - name: equipo
+    label: Equipo
+    folder: src/content/equipo
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: name, widget: string }
+      - { label: "Rol", name: role, widget: string }
+      - { label: "Biografía", name: bio, widget: text }
+      - { label: "Foto", name: photo, widget: image }
+      - { label: "Orden", name: order, widget: number, value_type: int, required: false }
+      - label: "Redes sociales"
+        name: socialLinks
+        widget: object
+        required: false
+        fields:
+          - { label: "Instagram", name: instagram, widget: string, required: false }
+          - { label: "Twitter / X", name: twitter, widget: string, required: false }
+          - { label: "LinkedIn", name: linkedin, widget: string, required: false }
