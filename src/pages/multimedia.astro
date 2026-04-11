@@ -3,38 +3,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import InstagramEmbed from '../components/InstagramEmbed.astro';
+import multimedia from '../data/multimedia.json';
 
-// Videos de YouTube de ejemplo (IDs de placeholder)
-const videos = [
-  { id: 'dQw4w9WgXcQ', title: '¿Qué es la materia oscura?' },
-  { id: 'dQw4w9WgXcQ', title: 'Cómo funciona el ADN' },
-  { id: 'dQw4w9WgXcQ', title: 'La física de los agujeros negros' },
-  { id: 'dQw4w9WgXcQ', title: 'Cambio climático explicado' },
-];
-
-// Galería de fotos
-const photos = [
-  { src: 'https://picsum.photos/seed/lab1/600/400', alt: 'Laboratorio de química' },
-  { src: 'https://picsum.photos/seed/lab2/600/400', alt: 'Equipo de trabajo en campo' },
-  { src: 'https://picsum.photos/seed/lab3/400/600', alt: 'Microscopio electrónico' },
-  { src: 'https://picsum.photos/seed/lab4/600/400', alt: 'Presentación en congreso' },
-  { src: 'https://picsum.photos/seed/lab5/400/600', alt: 'Muestras de laboratorio' },
-  { src: 'https://picsum.photos/seed/lab6/600/400', alt: 'Taller de divulgación' },
-];
-
-// Posts de Instagram (placeholders)
-const instagramPosts = [
-  'https://www.instagram.com/p/PLACEHOLDER1/',
-  'https://www.instagram.com/p/PLACEHOLDER2/',
-  'https://www.instagram.com/p/PLACEHOLDER3/',
-];
+const videos = multimedia.videos || [];
+const photos = multimedia.gallery || [];
+const instagramPosts = multimedia.instagramPosts || [];
+const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.length > 0;
 ---
 
 <BaseLayout title="Multimedia" description="Videos, fotos y contenido multimedia de Ciensite. Ciencia que se ve, se escucha y se comparte.">
   <Header />
 
   <main class="flex-1">
-    <!-- Videos -->
     <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16 fade-in">
       <div class="text-center mb-10">
         <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
@@ -45,169 +25,194 @@ const instagramPosts = [
         </p>
       </div>
 
-      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Videos</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-        {videos.map((video) => (
-          <div class="bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-            <div class="relative pb-[56.25%]">
-              <iframe
-                src={`https://www.youtube.com/embed/${video.id}`}
-                title={video.title}
-                class="absolute inset-0 w-full h-full"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <div class="p-4">
-              <h3 class="font-medium text-navy dark:text-warm-white">{video.title}</h3>
-            </div>
+      {!hasContent && (
+        <div class="text-center py-16">
+          <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+          </svg>
+          <p class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">
+            Contenido multimedia próximamente
+          </p>
+          <p class="text-sm text-gray-400 dark:text-gray-500 max-w-md mx-auto">
+            Estamos preparando videos, fotos y más contenido. Vuelve pronto para descubrir ciencia en formato audiovisual.
+          </p>
+        </div>
+      )}
+
+      <!-- Videos -->
+      {videos.length > 0 && (
+        <>
+          <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Videos</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+            {videos.map((video) => (
+              <div class="bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+                <div class="relative pb-[56.25%]">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.id}`}
+                    title={video.title}
+                    class="absolute inset-0 w-full h-full"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <div class="p-4">
+                  <h3 class="font-medium text-navy dark:text-warm-white">{video.title}</h3>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </section>
 
     <!-- Galería -->
-    <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
-      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Galería</h2>
-      <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-        {photos.map((photo, i) => (
-          <button
-            class="lightbox-trigger block w-full rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer break-inside-avoid"
-            data-index={i}
-            type="button"
-            aria-label={`Ver imagen: ${photo.alt}`}
-          >
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          </button>
-        ))}
-      </div>
-    </section>
+    {photos.length > 0 && (
+      <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
+        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Galería</h2>
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+          {photos.map((photo, i) => (
+            <button
+              class="lightbox-trigger block w-full rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer break-inside-avoid"
+              data-index={i}
+              type="button"
+              aria-label={`Ver imagen: ${photo.alt}`}
+            >
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </button>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Instagram -->
-    <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
-      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Instagram</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {instagramPosts.map((url) => (
-          <InstagramEmbed postUrl={url} />
-        ))}
-      </div>
-    </section>
+    {instagramPosts.length > 0 && (
+      <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
+        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Instagram</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {instagramPosts.map((post) => (
+            <InstagramEmbed postUrl={post.url} />
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Lightbox -->
-    <div
-      id="lightbox"
-      class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Visor de imagen"
-    >
-      <button
-        id="lightbox-close"
-        class="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-        aria-label="Cerrar visor"
-        type="button"
+    {photos.length > 0 && (
+      <div
+        id="lightbox"
+        class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Visor de imagen"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-      <button
-        id="lightbox-prev"
-        class="absolute left-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-        aria-label="Imagen anterior"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg" />
-      <button
-        id="lightbox-next"
-        class="absolute right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-        aria-label="Imagen siguiente"
-        type="button"
-      >
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+        <button
+          id="lightbox-close"
+          class="absolute top-4 right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          aria-label="Cerrar visor"
+          type="button"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button
+          id="lightbox-prev"
+          class="absolute left-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          aria-label="Imagen anterior"
+          type="button"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg" />
+        <button
+          id="lightbox-next"
+          class="absolute right-4 text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          aria-label="Imagen siguiente"
+          type="button"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    )}
   </main>
 
   <Footer />
 
-  <script is:inline define:vars={{ photos }}>
-    // Lightbox vanilla JS con focus trap
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const triggers = document.querySelectorAll('.lightbox-trigger');
-    let currentIndex = 0;
-    let lastFocusedElement = null;
+  {photos.length > 0 && (
+    <script is:inline define:vars={{ photos }}>
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const triggers = document.querySelectorAll('.lightbox-trigger');
+      let currentIndex = 0;
+      let lastFocusedElement = null;
 
-    // Elementos enfocables dentro del lightbox
-    const focusableSelector = 'button, [href], [tabindex]:not([tabindex="-1"])';
+      const focusableSelector = 'button, [href], [tabindex]:not([tabindex="-1"])';
 
-    function trapFocus(e) {
-      if (!lightbox || lightbox.classList.contains('hidden')) return;
-      const focusable = lightbox.querySelectorAll(focusableSelector);
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
+      function trapFocus(e) {
+        if (!lightbox || lightbox.classList.contains('hidden')) return;
+        const focusable = lightbox.querySelectorAll(focusableSelector);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
 
-      if (e.key === 'Tab') {
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       }
-    }
 
-    function openLightbox(index) {
-      currentIndex = index;
-      lastFocusedElement = document.activeElement;
-      lightboxImg.src = photos[index].src;
-      lightboxImg.alt = photos[index].alt;
-      lightbox.classList.remove('hidden');
-      lightbox.classList.add('flex');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('lightbox-close')?.focus();
-      document.addEventListener('keydown', trapFocus);
-    }
+      function openLightbox(index) {
+        currentIndex = index;
+        lastFocusedElement = document.activeElement;
+        lightboxImg.src = photos[index].src;
+        lightboxImg.alt = photos[index].alt;
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('lightbox-close')?.focus();
+        document.addEventListener('keydown', trapFocus);
+      }
 
-    function closeLightbox() {
-      lightbox.classList.add('hidden');
-      lightbox.classList.remove('flex');
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', trapFocus);
-      lastFocusedElement?.focus();
-    }
+      function closeLightbox() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', trapFocus);
+        lastFocusedElement?.focus();
+      }
 
-    function navigate(direction) {
-      currentIndex = (currentIndex + direction + photos.length) % photos.length;
-      lightboxImg.src = photos[currentIndex].src;
-      lightboxImg.alt = photos[currentIndex].alt;
-    }
+      function navigate(direction) {
+        currentIndex = (currentIndex + direction + photos.length) % photos.length;
+        lightboxImg.src = photos[currentIndex].src;
+        lightboxImg.alt = photos[currentIndex].alt;
+      }
 
-    triggers.forEach((btn) => {
-      btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
-    });
+      triggers.forEach((btn) => {
+        btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
+      });
 
-    document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
-    document.getElementById('lightbox-prev')?.addEventListener('click', () => navigate(-1));
-    document.getElementById('lightbox-next')?.addEventListener('click', () => navigate(1));
+      document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev')?.addEventListener('click', () => navigate(-1));
+      document.getElementById('lightbox-next')?.addEventListener('click', () => navigate(1));
 
-    lightbox?.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
+      lightbox?.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
 
-    document.addEventListener('keydown', (e) => {
-      if (lightbox?.classList.contains('hidden')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') navigate(-1);
-      if (e.key === 'ArrowRight') navigate(1);
-    });
-  </script>
+      document.addEventListener('keydown', (e) => {
+        if (lightbox?.classList.contains('hidden')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
+      });
+    </script>
+  )}
 </BaseLayout>

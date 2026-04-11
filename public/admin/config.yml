@@ -53,3 +53,56 @@ collections:
           - { label: "Instagram", name: instagram, widget: string, required: false }
           - { label: "Twitter / X", name: twitter, widget: string, required: false }
           - { label: "LinkedIn", name: linkedin, widget: string, required: false }
+
+  - name: settings
+    label: Configuración
+    files:
+      - name: theme
+        label: Tema y apariencia
+        file: src/data/settings.json
+        fields:
+          - { label: "Nombre del sitio", name: siteName, widget: string, default: "Ciensite" }
+          - { label: "Logo personalizado", name: logo, widget: image, required: false, hint: "Sube tu logo. Si no se proporciona, se usa el logo por defecto." }
+          - { label: "Imagen para redes sociales", name: ogImage, widget: image, required: false, hint: "Imagen que aparece al compartir en redes sociales. Recomendado: 1200x630px." }
+          - label: "Colores"
+            name: colors
+            widget: object
+            fields:
+              - { label: "Color primario", name: primary, widget: color, default: "#00C2A8", allowInput: true }
+              - { label: "Color primario oscuro (hover)", name: primaryDark, widget: color, default: "#00A38D", allowInput: true }
+              - { label: "Fondo modo oscuro", name: darkBg, widget: color, default: "#0A1628", allowInput: true }
+              - { label: "Fondo modo oscuro (claro)", name: darkBgLight, widget: color, default: "#122240", allowInput: true }
+              - { label: "Fondo modo claro", name: lightBg, widget: color, default: "#F8F7F4", allowInput: true }
+          - label: "Redes sociales"
+            name: social
+            widget: object
+            required: false
+            fields:
+              - { label: "Instagram", name: instagram, widget: string, required: false, hint: "URL completa, ej: https://instagram.com/tu_cuenta" }
+              - { label: "YouTube", name: youtube, widget: string, required: false, hint: "URL completa, ej: https://youtube.com/@tu_canal" }
+              - { label: "TikTok", name: tiktok, widget: string, required: false, hint: "URL completa, ej: https://tiktok.com/@tu_cuenta" }
+
+      - name: multimedia
+        label: Multimedia
+        file: src/data/multimedia.json
+        fields:
+          - label: "Videos de YouTube"
+            name: videos
+            widget: list
+            required: false
+            fields:
+              - { label: "ID del video", name: id, widget: string, hint: "El ID aparece en la URL después de 'v='. Ej: dQw4w9WgXcQ" }
+              - { label: "Título", name: title, widget: string }
+          - label: "Galería de fotos"
+            name: gallery
+            widget: list
+            required: false
+            fields:
+              - { label: "Foto", name: src, widget: image }
+              - { label: "Descripción", name: alt, widget: string }
+          - label: "Posts de Instagram"
+            name: instagramPosts
+            widget: list
+            required: false
+            fields:
+              - { label: "URL del post", name: url, widget: string, hint: "URL completa, ej: https://www.instagram.com/p/ABC123/" }

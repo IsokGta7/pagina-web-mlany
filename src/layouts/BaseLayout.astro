@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import settings from '../data/settings.json';
 
 interface Props {
   title: string;
@@ -8,16 +9,38 @@ interface Props {
   canonicalUrl?: string;
 }
 
+const siteName = settings.siteName || 'Ciensite';
+
 const {
   title,
-  description = 'Ciensite — Ciencia para todos. Divulgación científica por estudiantes mexicanos.',
-  ogImage = '/og-default.png',
+  description = `${siteName} — Ciencia para todos. Divulgación científica por estudiantes mexicanos.`,
+  ogImage,
   canonicalUrl,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.mx';
 const canonical = canonicalUrl ?? Astro.url.href;
-const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+// OG Image: use prop, then settings, then omit
+const resolvedOgImage = ogImage || settings.ogImage || '';
+const fullOgImage = resolvedOgImage
+  ? (resolvedOgImage.startsWith('http') ? resolvedOgImage : `${siteUrl}${resolvedOgImage}`)
+  : '';
+
+// Dynamic colors from CMS settings (sanitized to prevent CSS injection)
+const hexPattern = /^#[0-9A-Fa-f]{3,8}$/;
+function safeColor(value: string, fallback: string): string {
+  return hexPattern.test(value) ? value : fallback;
+}
+
+const colors = settings.colors || {};
+const colorOverrides = `:root {
+  --color-teal: ${safeColor(colors.primary, '#00C2A8')};
+  --color-teal-dark: ${safeColor(colors.primaryDark, '#00A38D')};
+  --color-navy: ${safeColor(colors.darkBg, '#0A1628')};
+  --color-navy-light: ${safeColor(colors.darkBgLight, '#122240')};
+  --color-warm-white: ${safeColor(colors.lightBg, '#F8F7F4')};
+}`;
 ---
 
 <!doctype html>
@@ -28,28 +51,28 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
     <meta name="generator" content={Astro.generator} />
 
     <!-- SEO -->
-    <title>{title} | Ciensite</title>
+    <title>{title} | {siteName}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={`${title} | Ciensite`} />
+    <meta property="og:title" content={`${title} | ${siteName}`} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={fullOgImage} />
+    {fullOgImage && <meta property="og:image" content={fullOgImage} />}
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="es_MX" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | Ciensite`} />
+    <meta name="twitter:title" content={`${title} | ${siteName}`} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={fullOgImage} />
+    {fullOgImage && <meta name="twitter:image" content={fullOgImage} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Netlify Identity: redirigir al admin tras aceptar invitación -->
-    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Color overrides from CMS settings -->
+    <style set:html={colorOverrides}></style>
 
     <!-- Modo oscuro: evitar parpadeo -->
     <script is:inline>
@@ -64,16 +87,23 @@ const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}
   <body class="min-h-screen flex flex-col antialiased">
     <slot />
 
-    <!-- Redirigir al admin tras login con Netlify Identity -->
+    <!-- Netlify Identity: solo cargar cuando se acepta una invitación -->
     <script is:inline>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', (user) => {
-          if (!user) {
-            window.netlifyIdentity.on('login', () => {
-              document.location.href = '/admin/';
+      if (window.location.hash && (window.location.hash.includes('invite_token') || window.location.hash.includes('recovery_token'))) {
+        var s = document.createElement('script');
+        s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+        document.head.appendChild(s);
+        s.onload = function() {
+          if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', function(user) {
+              if (!user) {
+                window.netlifyIdentity.on('login', function() {
+                  document.location.href = '/admin/';
+                });
+              }
             });
           }
-        });
+        };
       }
     </script>
 
