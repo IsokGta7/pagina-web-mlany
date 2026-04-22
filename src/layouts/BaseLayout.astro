@@ -28,7 +28,7 @@ const fullOgImage = resolvedOgImage
   : '';
 
 // Dynamic colors from CMS settings (sanitized to prevent CSS injection)
-const hexPattern = /^#[0-9A-Fa-f]{3,8}$/;
+const hexPattern = /^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/;
 function safeColor(value: string, fallback: string): string {
   return hexPattern.test(value) ? value : fallback;
 }

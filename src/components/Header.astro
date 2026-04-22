@@ -1,5 +1,6 @@
 ---
 import settings from '../data/settings.json';
+import Logo from './Logo.astro';
 
 const currentPath = Astro.url.pathname;
 const siteName = settings.siteName || 'Ciensite';
@@ -21,13 +22,7 @@ const navLinks = [
         <img src={settings.logo} alt={siteName} class="h-8 w-auto" />
       ) : (
         <>
-          <svg class="w-8 h-8 text-teal" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="16" cy="16" r="4" fill="currentColor"/>
-            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
-            <circle cx="16" cy="4" r="2.5" fill="currentColor"/>
-            <circle cx="27" cy="22" r="2.5" fill="currentColor"/>
-            <circle cx="5" cy="22" r="2.5" fill="currentColor"/>
-          </svg>
+          <Logo class="w-8 h-8 text-teal" />
           <span class="font-serif text-xl font-bold text-navy dark:text-warm-white group-hover:text-teal transition-colors">
             {siteName}
           </span>
