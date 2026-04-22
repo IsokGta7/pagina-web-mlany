@@ -14,6 +14,6 @@
   Cache-Control: public, max-age=3600
 
 /admin/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https://*.githubusercontent.com https://*.netlify.com; font-src 'self' data: https://unpkg.com; connect-src 'self' https://api.github.com https://*.netlify.com https://identity.netlify.com; frame-src 'none'; frame-ancestors 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https://*.githubusercontent.com https://*.netlify.com; font-src 'self' data: https://unpkg.com; connect-src 'self' blob: data: https://api.github.com https://*.netlify.com https://identity.netlify.com https://unpkg.com; frame-src 'none'; frame-ancestors 'self'
   X-Frame-Options: DENY
   Cache-Control: no-store, no-cache, must-revalidate
