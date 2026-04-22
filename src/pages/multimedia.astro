@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import InstagramEmbed from '../components/InstagramEmbed.astro';
+import Img from '../components/Img.astro';
 import multimedia from '../data/multimedia.json';
 
 const videos = multimedia.videos || [];
@@ -78,11 +79,11 @@ const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.leng
               type="button"
               aria-label={`Ver imagen: ${photo.alt}`}
             >
-              <img
+              <Img
                 src={photo.src}
                 alt={photo.alt}
                 class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </button>
           ))}

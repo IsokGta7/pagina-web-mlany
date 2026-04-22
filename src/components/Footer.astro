@@ -2,6 +2,7 @@
 import settings from '../data/settings.json';
 import Logo from './Logo.astro';
 import SocialIcon from './SocialIcon.astro';
+import Img from './Img.astro';
 
 const year = new Date().getFullYear();
 const siteName = settings.siteName || 'Ciensite';
@@ -16,7 +17,7 @@ const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
       <div>
         <a href="/" class="flex items-center gap-2 mb-4" aria-label={`${siteName} — Inicio`}>
           {settings.logo ? (
-            <img src={settings.logo} alt={siteName} class="h-7 w-auto" />
+            <Img src={settings.logo} alt={siteName} class="h-7 w-auto" sizes="200px" />
           ) : (
             <>
               <Logo class="w-7 h-7 text-teal" />

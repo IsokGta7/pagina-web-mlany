@@ -9,6 +9,7 @@ const articulos = defineCollection({
     date: z.coerce.date(),
     category: z.enum(['Biología', 'Física', 'Química', 'Tecnología', 'Medio Ambiente']),
     coverImage: z.string(),
+    coverImageAlt: z.string().optional(),
     author: z.string(),
   }),
 });

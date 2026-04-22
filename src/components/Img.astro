@@ -1,0 +1,59 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  sizes?: string;
+  quality?: number;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className,
+  loading = 'lazy',
+  priority = false,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px',
+  quality = 80,
+} = Astro.props;
+
+const isDev = import.meta.env.DEV;
+const isExternal = /^(https?:)?\/\//.test(src) || src.startsWith('data:');
+const useOptimization = !isDev && !isExternal && src.length > 0;
+
+function cdn(url: string, w: number): string {
+  const params = new URLSearchParams({
+    url,
+    w: String(w),
+    fm: 'webp',
+    q: String(quality),
+  });
+  return `/.netlify/images?${params.toString()}`;
+}
+
+const widths = [400, 800, 1200, 1600];
+const srcset = useOptimization
+  ? widths.map((w) => `${cdn(src, w)} ${w}w`).join(', ')
+  : undefined;
+
+const finalSrc = useOptimization ? cdn(src, 1200) : src;
+---
+
+<img
+  src={finalSrc}
+  srcset={srcset}
+  sizes={srcset ? sizes : undefined}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading={priority ? 'eager' : loading}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : undefined}
+/>

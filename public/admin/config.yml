@@ -29,6 +29,7 @@ collections:
           - Tecnología
           - Medio Ambiente
       - { label: "Imagen de portada", name: coverImage, widget: image }
+      - { label: "Texto alternativo de la portada", name: coverImageAlt, widget: string, required: false, hint: "Describe la imagen brevemente para accesibilidad y SEO. Si lo dejas vacío, se usará el título del artículo." }
       - { label: "Autor", name: author, widget: string }
       - { label: "Contenido", name: body, widget: markdown }
 
@@ -99,7 +100,7 @@ collections:
             required: false
             fields:
               - { label: "Foto", name: src, widget: image }
-              - { label: "Descripción", name: alt, widget: string }
+              - { label: "Descripción (texto alternativo)", name: alt, widget: string, required: true, hint: "Describe la imagen para accesibilidad" }
           - label: "Posts de Instagram"
             name: instagramPosts
             widget: list

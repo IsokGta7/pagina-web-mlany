@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
+import Img from '../components/Img.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
 
@@ -12,11 +13,12 @@ interface Props {
   date: Date;
   category: string;
   coverImage: string;
+  coverImageAlt?: string;
   author: string;
   slug: string;
 }
 
-const { title, description, date, category, coverImage, author, slug } = Astro.props;
+const { title, description, date, category, coverImage, coverImageAlt, author, slug } = Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString('es-MX', {
   year: 'numeric',
@@ -60,11 +62,12 @@ const encodedTitle = encodeURIComponent(title);
       </header>
 
       <!-- Imagen de portada -->
-      <img
+      <Img
         src={coverImage}
-        alt={`Imagen de portada: ${title}`}
+        alt={coverImageAlt || `Imagen de portada: ${title}`}
         class="w-full h-64 sm:h-80 lg:h-96 object-cover rounded-2xl mb-10"
-        loading="eager"
+        priority={true}
+        sizes="(max-width: 768px) 100vw, 768px"
       />
 
       <!-- Contenido del artículo -->
@@ -122,6 +125,7 @@ const encodedTitle = encodeURIComponent(title);
               date={articulo.data.date}
               category={articulo.data.category}
               coverImage={articulo.data.coverImage}
+              coverImageAlt={articulo.data.coverImageAlt}
               slug={articulo.id}
               readTime={estimateReadTime(articulo.body ?? '')}
             />
