@@ -71,6 +71,10 @@ const colorOverrides = `:root {
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Preload fonts to avoid FOIT -->
+    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/lora/v35/0QI6MX1D_JOuGQbT0gvTJPa787weuxJBkq0.woff2" crossorigin="anonymous" />
+
     <!-- Color overrides from CMS settings -->
     <style set:html={colorOverrides}></style>
 
@@ -85,6 +89,13 @@ const colorOverrides = `:root {
     </script>
   </head>
   <body class="min-h-screen flex flex-col antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-teal focus:text-navy focus:font-semibold focus:rounded-lg focus:shadow-lg"
+    >
+      Saltar al contenido principal
+    </a>
+
     <slot />
 
     <!-- Netlify Identity: solo cargar cuando se acepta una invitación -->
