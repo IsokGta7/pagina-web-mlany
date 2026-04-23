@@ -3,6 +3,8 @@ import settings from '../data/settings.json';
 
 const c = settings.comments || {};
 const enabled = c.enabled === true && c.repo && c.repoId && c.categoryId;
+const banner = settings.cookieBanner || {};
+const bannerEnabled = banner.enabled !== false;
 ---
 
 {enabled && (
@@ -14,9 +16,12 @@ const enabled = c.enabled === true && c.repo && c.repoId && c.categoryId;
       </p>
     </div>
 
-    <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname' }}>
+    <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname', bannerEnabled }}>
       (function () {
-        function loadGiscus() {
+        var loaded = false;
+        function loadGiscusOnce() {
+          if (loaded) return;
+          loaded = true;
           var container = document.getElementById('giscus-container');
           if (!container) return;
           var placeholder = document.getElementById('giscus-placeholder');
@@ -41,26 +46,37 @@ const enabled = c.enabled === true && c.repo && c.repoId && c.categoryId;
           container.appendChild(s);
         }
 
-        // Only load after cookie consent or if no banner is enabled
-        if (localStorage.getItem('cookie-consent') === 'accepted' || localStorage.getItem('cookie-consent') === null) {
-          // If no consent yet, wait — otherwise load immediately
-          if (localStorage.getItem('cookie-consent') === 'accepted') {
-            loadGiscus();
-          } else {
-            // Poll briefly for consent — if user accepts, load then
-            window.addEventListener('cookie-accepted', loadGiscus, { once: true });
-            // Also check periodically (banner may not dispatch event)
-            var check = setInterval(function () {
-              if (localStorage.getItem('cookie-consent') === 'accepted') {
-                clearInterval(check);
-                loadGiscus();
-              } else if (localStorage.getItem('cookie-consent') === 'rejected') {
-                clearInterval(check);
-                var placeholder = document.getElementById('giscus-placeholder');
-                if (placeholder) placeholder.textContent = 'Los comentarios están desactivados porque rechazaste las cookies.';
-              }
-            }, 1000);
-          }
+        function showRejected() {
+          var placeholder = document.getElementById('giscus-placeholder');
+          if (placeholder) placeholder.textContent = 'Los comentarios están desactivados porque rechazaste las cookies.';
+        }
+
+        var consent = localStorage.getItem('cookie-consent');
+
+        // If the cookie banner is off, there is no consent gate — load directly.
+        if (!bannerEnabled) {
+          loadGiscusOnce();
+          return;
+        }
+
+        if (consent === 'accepted') {
+          loadGiscusOnce();
+        } else if (consent === 'rejected') {
+          showRejected();
+        } else {
+          // Unset: wait for the user to interact with the banner.
+          // Poll localStorage — the banner reloads the page on accept so
+          // this mostly covers dev/testing and edge cases.
+          var check = setInterval(function () {
+            var c = localStorage.getItem('cookie-consent');
+            if (c === 'accepted') {
+              clearInterval(check);
+              loadGiscusOnce();
+            } else if (c === 'rejected') {
+              clearInterval(check);
+              showRejected();
+            }
+          }, 1000);
         }
       })();
     </script>
