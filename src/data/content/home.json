@@ -1,0 +1,26 @@
+{
+  "hero": {
+    "title": "Ciencia para",
+    "highlight": "todos",
+    "subtitle": "Somos un grupo de estudiantes mexicanos apasionados por la divulgación científica. Hacemos la ciencia accesible, interesante y en español.",
+    "primaryCta": "Ver artículos",
+    "secondaryCta": "Seguirnos en Instagram",
+    "background": "atomic"
+  },
+  "latest": {
+    "heading": "Últimas publicaciones",
+    "subtitle": "Explora nuestros artículos más recientes sobre ciencia, tecnología y medio ambiente.",
+    "viewAllLabel": "Ver todos los artículos"
+  },
+  "about": {
+    "heading": "Sobre nosotros",
+    "paragraph1": "**Ciensite** nació de la convicción de que la ciencia debe ser un derecho, no un privilegio. Somos estudiantes de diversas universidades mexicanas que compartimos una misión: traducir el conocimiento científico a un lenguaje que todos puedan entender y disfrutar.",
+    "paragraph2": "Desde biología molecular hasta astrofísica, pasando por tecnología y medio ambiente, cubrimos los temas que están transformando nuestro mundo. Porque entender la ciencia es entender nuestro futuro.",
+    "ctaLabel": "Conoce al equipo",
+    "background": "molecular"
+  },
+  "followUs": {
+    "heading": "Síguenos",
+    "subtitle": "Encuentra contenido científico en todas nuestras plataformas."
+  }
+}

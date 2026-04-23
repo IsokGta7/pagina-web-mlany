@@ -2,25 +2,26 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import misc from '../data/content/misc.json';
 ---
 
-<BaseLayout title="Página no encontrada" description="La página que buscas no existe o fue movida.">
+<BaseLayout title={misc.notFound.heading} description={misc.notFound.body}>
   <Header />
 
   <main class="flex-1 flex items-center justify-center">
     <div class="text-center px-4 py-24">
       <p class="text-7xl font-bold text-teal mb-4">404</p>
       <h1 class="font-serif text-2xl sm:text-3xl font-bold text-navy dark:text-warm-white mb-4">
-        Página no encontrada
+        {misc.notFound.heading}
       </h1>
       <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
-        La página que buscas no existe o fue movida a otra dirección.
+        {misc.notFound.body}
       </p>
       <a
         href="/"
         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors"
       >
-        Volver al inicio
+        {misc.notFound.backHomeLabel}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </a>
     </div>

@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
+import articlesContent from '../data/content/articles.json';
 
 interface Props {
   title: string;
@@ -53,7 +54,7 @@ const encodedTitle = encodeURIComponent(title);
           {title}
         </h1>
         <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-sm">
-          <span>Por <strong class="text-gray-700 dark:text-gray-200">{author}</strong></span>
+          <span>{articlesContent.article.byLabel} <strong class="text-gray-700 dark:text-gray-200">{author}</strong></span>
           <span>•</span>
           <time datetime={date.toISOString()}>{formattedDate}</time>
         </div>
@@ -74,7 +75,7 @@ const encodedTitle = encodeURIComponent(title);
 
       <!-- Botones de compartir -->
       <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">Compartir este artículo</p>
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">{articlesContent.article.shareHeading}</p>
         <div class="flex gap-3">
           <a
             href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
@@ -99,10 +100,10 @@ const encodedTitle = encodeURIComponent(title);
           <button
             id="copy-link-btn"
             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 dark:bg-navy-light text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm cursor-pointer"
-            aria-label="Copiar enlace"
+            aria-label={articlesContent.article.copyLinkLabel}
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-            <span id="copy-link-text">Copiar enlace</span>
+            <span id="copy-link-text">{articlesContent.article.copyLinkLabel}</span>
           </button>
         </div>
       </div>
@@ -112,7 +113,7 @@ const encodedTitle = encodeURIComponent(title);
     {related.length > 0 && (
       <section class="max-w-5xl mx-auto px-4 pb-16">
         <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-8">
-          Artículos relacionados
+          {articlesContent.article.relatedHeading}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {related.map((articulo) => (
@@ -133,14 +134,14 @@ const encodedTitle = encodeURIComponent(title);
 
   <Footer />
 
-  <script is:inline>
+  <script is:inline define:vars={{ copiedLabel: articlesContent.article.copiedLabel, copyLabel: articlesContent.article.copyLinkLabel }}>
     document.getElementById('copy-link-btn')?.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
         const textEl = document.getElementById('copy-link-text');
         if (textEl) {
-          textEl.textContent = '¡Copiado!';
-          setTimeout(() => { textEl.textContent = 'Copiar enlace'; }, 2000);
+          textEl.textContent = copiedLabel;
+          setTimeout(() => { textEl.textContent = copyLabel; }, 2000);
         }
       } catch {
         // Fallback silencioso

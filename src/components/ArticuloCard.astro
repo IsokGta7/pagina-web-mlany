@@ -1,4 +1,6 @@
 ---
+import articlesContent from '../data/content/articles.json';
+
 interface Props {
   title: string;
   description: string;
@@ -43,7 +45,7 @@ const displayReadTime = readTime ?? 1;
       </p>
       <div class="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
         <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
-        <span>{displayReadTime} min de lectura</span>
+        <span>{displayReadTime} {articlesContent.article.readTimeLabel}</span>
       </div>
     </div>
   </a>
