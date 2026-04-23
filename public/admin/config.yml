@@ -81,6 +81,24 @@ collections:
               - { label: "Instagram", name: instagram, widget: string, required: false, hint: "URL completa, ej: https://instagram.com/tu_cuenta" }
               - { label: "YouTube", name: youtube, widget: string, required: false, hint: "URL completa, ej: https://youtube.com/@tu_canal" }
               - { label: "TikTok", name: tiktok, widget: string, required: false, hint: "URL completa, ej: https://tiktok.com/@tu_cuenta" }
+          - label: "Analítica"
+            name: analytics
+            widget: object
+            required: false
+            fields:
+              - { label: "ID de Google Analytics 4", name: ga4Id, widget: string, required: false, hint: "Empieza con 'G-'. Ej: G-XXXXXXXXXX. Déjalo vacío para desactivar." }
+          - label: "SEO"
+            name: seo
+            widget: object
+            required: false
+            fields:
+              - { label: "Descripción por defecto del sitio", name: defaultDescription, widget: text, required: false, hint: "Descripción meta que aparece en buscadores y al compartir (opcional)" }
+              - label: "Rutas a bloquear en robots.txt"
+                name: disallowPaths
+                widget: list
+                required: false
+                default: []
+                hint: "Rutas que no quieres que Google indexe. Ej: /admin/, /privada/"
 
       - name: multimedia
         label: Multimedia
