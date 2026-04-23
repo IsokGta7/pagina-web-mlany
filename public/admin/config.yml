@@ -23,13 +23,12 @@ collections:
       - { label: "Fecha de publicación", name: date, widget: datetime, format: "YYYY-MM-DD" }
       - label: "Categoría"
         name: category
-        widget: select
-        options:
-          - Biología
-          - Física
-          - Química
-          - Tecnología
-          - Medio Ambiente
+        widget: relation
+        collection: configuracion
+        file: categorias
+        search_fields: ["items.*.name"]
+        value_field: "items.*.name"
+        display_fields: ["items.*.name"]
       - { label: "Imagen de portada", name: coverImage, widget: image }
       - { label: "Texto alternativo de la portada", name: coverImageAlt, widget: string, required: false, hint: "Describe la imagen brevemente para accesibilidad y SEO. Si lo dejas vacío, se usará el título del artículo." }
       - { label: "Autor (nombre visible)", name: author, widget: string }

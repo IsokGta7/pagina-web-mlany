@@ -27,6 +27,7 @@ const equipo = (await getCollection('equipo'))
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 fade-in">
         {equipo.map((member) => (
           <TeamCard
+            id={member.id}
             name={member.data.name}
             role={member.data.role}
             bio={member.data.bio}
