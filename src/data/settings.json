@@ -13,5 +13,12 @@
     "instagram": "",
     "youtube": "",
     "tiktok": ""
+  },
+  "analytics": {
+    "ga4Id": ""
+  },
+  "seo": {
+    "defaultDescription": "",
+    "disallowPaths": []
   }
 }

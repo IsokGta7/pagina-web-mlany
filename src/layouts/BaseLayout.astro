@@ -70,6 +70,7 @@ const colorOverrides = `:root {
     {fullOgImage && <meta name="twitter:image" content={fullOgImage} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} — RSS`} href="/rss.xml" />
 
     <!-- Preload fonts to avoid FOIT -->
     <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" crossorigin="anonymous" />
@@ -77,6 +78,27 @@ const colorOverrides = `:root {
 
     <!-- Color overrides from CMS settings -->
     <style set:html={colorOverrides}></style>
+
+    {settings.analytics?.ga4Id && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${settings.analytics.ga4Id}`}></script>
+        <script is:inline define:vars={{ gaId: settings.analytics.ga4Id }}>
+          (function () {
+            function loadGa() {
+              window.dataLayer = window.dataLayer || [];
+              function gtag() { dataLayer.push(arguments); }
+              window.gtag = gtag;
+              gtag('js', new Date());
+              gtag('config', gaId, { anonymize_ip: true });
+            }
+            // Only load if user hasn't rejected cookies (or no consent banner exists yet)
+            if (localStorage.getItem('cookie-consent') !== 'rejected') {
+              loadGa();
+            }
+          })();
+        </script>
+      </>
+    )}
 
     <!-- Modo oscuro: evitar parpadeo -->
     <script is:inline>
