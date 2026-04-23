@@ -81,6 +81,21 @@ collections:
               - { label: "Instagram", name: instagram, widget: string, required: false, hint: "URL completa, ej: https://instagram.com/tu_cuenta" }
               - { label: "YouTube", name: youtube, widget: string, required: false, hint: "URL completa, ej: https://youtube.com/@tu_canal" }
               - { label: "TikTok", name: tiktok, widget: string, required: false, hint: "URL completa, ej: https://tiktok.com/@tu_cuenta" }
+          - label: "Comentarios (Giscus)"
+            name: comments
+            widget: object
+            required: false
+            fields:
+              - { label: "Activado", name: enabled, widget: boolean, default: false, hint: "Requiere instalar la app Giscus y habilitar Discussions en el repo" }
+              - { label: "Repositorio (owner/repo)", name: repo, widget: string, required: false, hint: "Ej: IsokGta7/pagina-web-mlany" }
+              - { label: "Repo ID", name: repoId, widget: string, required: false, hint: "Se obtiene en https://giscus.app" }
+              - { label: "Categoría", name: category, widget: string, default: "General" }
+              - { label: "Category ID", name: categoryId, widget: string, required: false, hint: "Se obtiene en https://giscus.app" }
+              - label: "Mapeo"
+                name: mapping
+                widget: select
+                default: pathname
+                options: [pathname, url, title, og:title, specific, number]
 
       - name: multimedia
         label: Multimedia

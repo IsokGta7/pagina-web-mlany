@@ -1,0 +1,68 @@
+---
+import settings from '../data/settings.json';
+
+const c = settings.comments || {};
+const enabled = c.enabled === true && c.repo && c.repoId && c.categoryId;
+---
+
+{enabled && (
+  <section class="max-w-3xl mx-auto px-4 pb-16">
+    <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Comentarios</h2>
+    <div id="giscus-container" class="min-h-[200px]">
+      <p id="giscus-placeholder" class="text-sm text-gray-500 dark:text-gray-400 p-4 bg-gray-50 dark:bg-navy-light rounded-xl">
+        Los comentarios se activarán después de aceptar las cookies.
+      </p>
+    </div>
+
+    <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname' }}>
+      (function () {
+        function loadGiscus() {
+          var container = document.getElementById('giscus-container');
+          if (!container) return;
+          var placeholder = document.getElementById('giscus-placeholder');
+          if (placeholder) placeholder.remove();
+
+          var s = document.createElement('script');
+          s.src = 'https://giscus.app/client.js';
+          s.async = true;
+          s.crossOrigin = 'anonymous';
+          s.setAttribute('data-repo', repo);
+          s.setAttribute('data-repo-id', repoId);
+          s.setAttribute('data-category', category);
+          s.setAttribute('data-category-id', categoryId);
+          s.setAttribute('data-mapping', mapping);
+          s.setAttribute('data-strict', '0');
+          s.setAttribute('data-reactions-enabled', '1');
+          s.setAttribute('data-emit-metadata', '0');
+          s.setAttribute('data-input-position', 'bottom');
+          s.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+          s.setAttribute('data-lang', 'es');
+          s.setAttribute('data-loading', 'lazy');
+          container.appendChild(s);
+        }
+
+        // Only load after cookie consent or if no banner is enabled
+        if (localStorage.getItem('cookie-consent') === 'accepted' || localStorage.getItem('cookie-consent') === null) {
+          // If no consent yet, wait — otherwise load immediately
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            loadGiscus();
+          } else {
+            // Poll briefly for consent — if user accepts, load then
+            window.addEventListener('cookie-accepted', loadGiscus, { once: true });
+            // Also check periodically (banner may not dispatch event)
+            var check = setInterval(function () {
+              if (localStorage.getItem('cookie-consent') === 'accepted') {
+                clearInterval(check);
+                loadGiscus();
+              } else if (localStorage.getItem('cookie-consent') === 'rejected') {
+                clearInterval(check);
+                var placeholder = document.getElementById('giscus-placeholder');
+                if (placeholder) placeholder.textContent = 'Los comentarios están desactivados porque rechazaste las cookies.';
+              }
+            }, 1000);
+          }
+        }
+      })();
+    </script>
+  </section>
+)}

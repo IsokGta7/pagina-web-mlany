@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
+import Comments from '../components/Comments.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
 
@@ -107,6 +108,8 @@ const encodedTitle = encodeURIComponent(title);
         </div>
       </div>
     </article>
+
+    <Comments />
 
     <!-- Artículos relacionados -->
     {related.length > 0 && (

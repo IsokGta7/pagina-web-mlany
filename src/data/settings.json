@@ -13,5 +13,13 @@
     "instagram": "",
     "youtube": "",
     "tiktok": ""
+  },
+  "comments": {
+    "enabled": false,
+    "repo": "",
+    "repoId": "",
+    "category": "General",
+    "categoryId": "",
+    "mapping": "pathname"
   }
 }
