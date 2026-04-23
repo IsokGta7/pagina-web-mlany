@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import InstagramEmbed from '../components/InstagramEmbed.astro';
+import Img from '../components/Img.astro';
 import multimedia from '../data/multimedia.json';
 import misc from '../data/content/misc.json';
 
@@ -16,7 +17,7 @@ const t = misc.multimedia;
 <BaseLayout title={t.heading} description="Videos, fotos y contenido multimedia. Ciencia que se ve, se escucha y se comparte.">
   <Header />
 
-  <main class="flex-1">
+  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16 fade-in">
       <div class="text-center mb-10">
         <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
@@ -80,11 +81,11 @@ const t = misc.multimedia;
               type="button"
               aria-label={`Ver imagen: ${photo.alt}`}
             >
-              <img
+              <Img
                 src={photo.src}
                 alt={photo.alt}
                 class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                loading="lazy"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             </button>
           ))}

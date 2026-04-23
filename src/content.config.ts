@@ -14,6 +14,7 @@ const articulos = defineCollection({
       message: `La categoría debe ser una de: ${validCategories.join(', ')}. Edita src/data/categories.json para agregar más.`,
     }),
     coverImage: z.string(),
+    coverImageAlt: z.string().optional(),
     author: z.string(),
   }),
 });

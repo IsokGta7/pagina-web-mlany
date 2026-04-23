@@ -37,7 +37,7 @@ function renderBold(text: string): string {
 <BaseLayout title="Inicio" description="Ciensite — Divulgación científica por estudiantes mexicanos. Ciencia accesible, en español y para todos.">
   <Header />
 
-  <main class="flex-1">
+  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <!-- Hero -->
     <section class="relative overflow-hidden bg-navy text-warm-white">
       <Background variant={home.hero.background as any} />
@@ -89,6 +89,7 @@ function renderBold(text: string): string {
             date={articulo.data.date}
             category={articulo.data.category}
             coverImage={articulo.data.coverImage}
+            coverImageAlt={articulo.data.coverImageAlt}
             slug={articulo.id}
             readTime={articulo.readTime}
           />

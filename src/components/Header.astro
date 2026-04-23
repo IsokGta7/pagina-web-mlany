@@ -1,6 +1,7 @@
 ---
 import settings from '../data/settings.json';
 import Logo from './Logo.astro';
+import Img from './Img.astro';
 
 const currentPath = Astro.url.pathname;
 const siteName = settings.siteName || 'Ciensite';
@@ -19,7 +20,7 @@ const navLinks = [
     <!-- Logo -->
     <a href="/" class="flex items-center gap-2 group" aria-label={`${siteName} — Inicio`}>
       {settings.logo ? (
-        <img src={settings.logo} alt={siteName} class="h-8 w-auto" />
+        <Img src={settings.logo} alt={siteName} class="h-8 w-auto" priority={true} sizes="200px" />
       ) : (
         <>
           <Logo class="w-8 h-8 text-teal" />

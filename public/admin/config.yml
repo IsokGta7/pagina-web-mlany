@@ -28,6 +28,7 @@ collections:
         value_field: "items.*.name"
         display_fields: ["items.*.name"]
       - { label: "Imagen de portada", name: coverImage, widget: image }
+      - { label: "Texto alternativo de la portada", name: coverImageAlt, widget: string, required: false, hint: "Describe la imagen brevemente para accesibilidad y SEO. Si lo dejas vacío, se usará el título del artículo." }
       - { label: "Autor", name: author, widget: string }
       - { label: "Contenido", name: body, widget: markdown }
 

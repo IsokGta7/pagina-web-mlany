@@ -25,7 +25,7 @@ const categories = [articlesContent.list.allCategoriesLabel, ...categoriesData.i
 <BaseLayout title={articlesContent.list.heading} description="Explora nuestros artículos sobre ciencia, tecnología y medio ambiente. Divulgación científica en español.">
   <Header />
 
-  <main class="flex-1">
+  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
       <!-- Encabezado -->
       <div class="text-center mb-10">
@@ -65,6 +65,7 @@ const categories = [articlesContent.list.allCategoriesLabel, ...categoriesData.i
               date={articulo.data.date}
               category={articulo.data.category}
               coverImage={articulo.data.coverImage}
+              coverImageAlt={articulo.data.coverImageAlt}
               slug={articulo.id}
               readTime={articulo.readTime}
             />
