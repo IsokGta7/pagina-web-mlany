@@ -81,24 +81,36 @@ const colorOverrides = `:root {
     <style set:html={colorOverrides}></style>
 
     {settings.analytics?.ga4Id && (
-      <>
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${settings.analytics.ga4Id}`}></script>
-        <script is:inline define:vars={{ gaId: settings.analytics.ga4Id }}>
-          (function () {
-            function loadGa() {
-              window.dataLayer = window.dataLayer || [];
-              function gtag() { dataLayer.push(arguments); }
-              window.gtag = gtag;
-              gtag('js', new Date());
-              gtag('config', gaId, { anonymize_ip: true });
-            }
-            // Only load if user hasn't rejected cookies (or no consent banner exists yet)
-            if (localStorage.getItem('cookie-consent') !== 'rejected') {
-              loadGa();
-            }
-          })();
-        </script>
-      </>
+      <script is:inline define:vars={{ gaId: settings.analytics.ga4Id, bannerEnabled: settings.cookieBanner?.enabled !== false }}>
+        (function () {
+          var loaded = false;
+          function loadGa() {
+            if (loaded) return;
+            loaded = true;
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', gaId, { anonymize_ip: true });
+          }
+
+          var consent = localStorage.getItem('cookie-consent');
+
+          // If banner is disabled, the client owns the consent decision —
+          // load analytics directly. Otherwise require explicit 'accepted'.
+          if (!bannerEnabled) {
+            loadGa();
+          } else if (consent === 'accepted') {
+            loadGa();
+          }
+          // null (no decision) or 'rejected' → do not load. CookieBanner reloads
+          // the page on accept, so GA will initialize on the next request.
+        })();
+      </script>
     )}
 
     <!-- Modo oscuro: evitar parpadeo -->
