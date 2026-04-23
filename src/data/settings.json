@@ -1,26 +1,20 @@
 {
-  "siteName": "Ciensite",
-  "logo": "",
   "ogImage": "",
-  "colors": {
-    "primary": "#00C2A8",
-    "primaryDark": "#00A38D",
-    "darkBg": "#0A1628",
-    "darkBgLight": "#122240",
-    "lightBg": "#F8F7F4"
+  "analytics": {
+    "ga4Id": ""
   },
+  "logo": "",
   "social": {
     "instagram": "",
     "youtube": "",
     "tiktok": ""
   },
-  "comments": {
-    "enabled": false,
-    "repo": "",
-    "repoId": "",
-    "category": "General",
-    "categoryId": "",
-    "mapping": "pathname"
+  "colors": {
+    "primary": "#724c67",
+    "primaryDark": "#b4d06e",
+    "darkBg": "#000000",
+    "darkBgLight": "#304260",
+    "lightBg": "#ff6467"
   },
   "cookieBanner": {
     "enabled": true,
@@ -30,17 +24,23 @@
     "rejectLabel": "Rechazar",
     "privacyLinkLabel": "Política de privacidad"
   },
+  "siteName": "Ciensite",
+  "comments": {
+    "enabled": true,
+    "repo": "",
+    "repoId": "",
+    "category": "General",
+    "categoryId": "",
+    "mapping": "pathname"
+  },
   "newsletter": {
-    "enabled": false,
+    "enabled": true,
     "actionUrl": "",
     "title": "Suscríbete",
     "subtitle": "Recibe nuestros artículos directamente en tu correo.",
     "emailPlaceholder": "tu@correo.com",
     "submitLabel": "Suscribirme",
     "successMessage": "¡Gracias por suscribirte!"
-  },
-  "analytics": {
-    "ga4Id": ""
   },
   "seo": {
     "defaultDescription": "",
