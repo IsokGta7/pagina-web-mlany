@@ -21,13 +21,12 @@ collections:
       - { label: "Fecha de publicación", name: date, widget: datetime, format: "YYYY-MM-DD" }
       - label: "Categoría"
         name: category
-        widget: select
-        options:
-          - Biología
-          - Física
-          - Química
-          - Tecnología
-          - Medio Ambiente
+        widget: relation
+        collection: configuracion
+        file: categorias
+        search_fields: ["items.*.name"]
+        value_field: "items.*.name"
+        display_fields: ["items.*.name"]
       - { label: "Imagen de portada", name: coverImage, widget: image }
       - { label: "Texto alternativo de la portada", name: coverImageAlt, widget: string, required: false, hint: "Describe la imagen brevemente para accesibilidad y SEO. Si lo dejas vacío, se usará el título del artículo." }
       - { label: "Autor", name: author, widget: string }
@@ -55,7 +54,7 @@ collections:
           - { label: "Twitter / X", name: twitter, widget: string, required: false }
           - { label: "LinkedIn", name: linkedin, widget: string, required: false }
 
-  - name: settings
+  - name: configuracion
     label: Configuración
     files:
       - name: theme
@@ -83,8 +82,166 @@ collections:
               - { label: "YouTube", name: youtube, widget: string, required: false, hint: "URL completa, ej: https://youtube.com/@tu_canal" }
               - { label: "TikTok", name: tiktok, widget: string, required: false, hint: "URL completa, ej: https://tiktok.com/@tu_cuenta" }
 
+      - name: categorias
+        label: Categorías de artículos
+        file: src/data/categories.json
+        fields:
+          - label: "Categorías"
+            name: items
+            widget: list
+            fields:
+              - { label: "Nombre", name: name, widget: string }
+
+      - name: home
+        label: Página de inicio
+        file: src/data/content/home.json
+        fields:
+          - label: "Hero (sección principal)"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Título principal", name: title, widget: string }
+              - { label: "Palabra destacada", name: highlight, widget: string, required: false, hint: "Aparece en color de acento después del título" }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Botón principal", name: primaryCta, widget: string }
+              - { label: "Botón Instagram", name: secondaryCta, widget: string, required: false }
+              - label: "Fondo decorativo"
+                name: background
+                widget: select
+                options: [atomic, molecular, geometric, minimal, none]
+                default: atomic
+          - label: "Últimas publicaciones"
+            name: latest
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Texto del enlace 'Ver todos'", name: viewAllLabel, widget: string }
+          - label: "Sobre nosotros"
+            name: about
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Primer párrafo", name: paragraph1, widget: text, hint: "Usa **texto** para resaltar en negrita" }
+              - { label: "Segundo párrafo", name: paragraph2, widget: text }
+              - { label: "Botón", name: ctaLabel, widget: string }
+              - label: "Fondo decorativo"
+                name: background
+                widget: select
+                options: [atomic, molecular, geometric, minimal, none]
+                default: molecular
+          - label: "Sección Síguenos"
+            name: followUs
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+
+      - name: articulos_page
+        label: Página de artículos
+        file: src/data/content/articles.json
+        fields:
+          - label: "Listado de artículos"
+            name: list
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Etiqueta 'Todos'", name: allCategoriesLabel, widget: string }
+              - { label: "Placeholder de búsqueda", name: searchPlaceholder, widget: string }
+              - { label: "Mensaje sin resultados (filtro)", name: noResults, widget: string }
+              - { label: "Mensaje sin resultados (búsqueda)", name: noSearchResults, widget: string }
+          - label: "Página del artículo"
+            name: article
+            widget: object
+            fields:
+              - { label: "Etiqueta 'min de lectura'", name: readTimeLabel, widget: string }
+              - { label: "Etiqueta 'Por'", name: byLabel, widget: string }
+              - { label: "Encabezado compartir", name: shareHeading, widget: string }
+              - { label: "Texto botón copiar", name: copyLinkLabel, widget: string }
+              - { label: "Mensaje al copiar", name: copiedLabel, widget: string }
+              - { label: "Encabezado relacionados", name: relatedHeading, widget: string }
+
+      - name: contact
+        label: Página de contacto
+        file: src/data/content/contact.json
+        fields:
+          - { label: "Encabezado", name: heading, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - label: "Formulario"
+            name: form
+            widget: object
+            fields:
+              - { label: "Etiqueta Nombre", name: nameLabel, widget: string }
+              - { label: "Placeholder Nombre", name: namePlaceholder, widget: string }
+              - { label: "Etiqueta Correo", name: emailLabel, widget: string }
+              - { label: "Placeholder Correo", name: emailPlaceholder, widget: string }
+              - { label: "Etiqueta Asunto", name: subjectLabel, widget: string }
+              - { label: "Placeholder Asunto", name: subjectPlaceholder, widget: string }
+              - { label: "Etiqueta Mensaje", name: messageLabel, widget: string }
+              - { label: "Placeholder Mensaje", name: messagePlaceholder, widget: string }
+              - { label: "Texto botón enviar", name: submitLabel, widget: string }
+              - { label: "Texto botón enviando", name: submittingLabel, widget: string }
+              - { label: "Mensaje de éxito", name: successMessage, widget: text }
+              - { label: "Mensaje de error", name: errorMessage, widget: text }
+          - label: "Información de contacto"
+            name: info
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Ubicación", name: location, widget: string, required: false }
+              - { label: "Correo electrónico", name: email, widget: string, required: false }
+              - { label: "Instagram (handle)", name: instagramHandle, widget: string, required: false }
+          - { label: "URL del mapa (Google Maps embed src)", name: mapEmbedUrl, widget: string, required: false, hint: "En Google Maps → Compartir → Insertar mapa → copia solo el valor de src=\"...\"" }
+
+      - name: team
+        label: Página de equipo
+        file: src/data/content/team.json
+        fields:
+          - { label: "Encabezado", name: heading, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - label: "Llamada a unirse"
+            name: joinCta
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Texto", name: body, widget: text }
+              - { label: "Botón", name: label, widget: string }
+
+      - name: misc
+        label: Footer, 404, Multimedia
+        file: src/data/content/misc.json
+        fields:
+          - label: "Footer"
+            name: footer
+            widget: object
+            fields:
+              - { label: "Eslogan", name: tagline, widget: text }
+              - { label: "Encabezado 'Explorar'", name: exploreHeading, widget: string }
+              - { label: "Encabezado 'Síguenos'", name: followHeading, widget: string }
+              - { label: "Sufijo copyright", name: copyrightSuffix, widget: string }
+              - { label: "Etiqueta 'Administrar'", name: adminLabel, widget: string }
+          - label: "Página 404"
+            name: notFound
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Mensaje", name: body, widget: text }
+              - { label: "Botón volver", name: backHomeLabel, widget: string }
+          - label: "Página de multimedia"
+            name: multimedia
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Encabezado Videos", name: videosHeading, widget: string }
+              - { label: "Encabezado Galería", name: galleryHeading, widget: string }
+              - { label: "Encabezado Instagram", name: instagramHeading, widget: string }
+              - { label: "Encabezado estado vacío", name: emptyHeading, widget: string }
+              - { label: "Mensaje estado vacío", name: emptyBody, widget: text }
+
       - name: multimedia
-        label: Multimedia
+        label: Multimedia (videos, galería, Instagram)
         file: src/data/multimedia.json
         fields:
           - label: "Videos de YouTube"

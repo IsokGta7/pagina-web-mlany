@@ -1,0 +1,23 @@
+{
+  "footer": {
+    "tagline": "Divulgación científica hecha por estudiantes mexicanos. Ciencia para todos, accesible y en español.",
+    "exploreHeading": "Explorar",
+    "followHeading": "Síguenos",
+    "copyrightSuffix": "Todos los derechos reservados.",
+    "adminLabel": "Administrar"
+  },
+  "notFound": {
+    "heading": "Página no encontrada",
+    "body": "La página que buscas no existe o fue movida a otra dirección.",
+    "backHomeLabel": "Volver al inicio"
+  },
+  "multimedia": {
+    "heading": "Multimedia",
+    "subtitle": "Contenido audiovisual para aprender ciencia de forma entretenida.",
+    "videosHeading": "Videos",
+    "galleryHeading": "Galería",
+    "instagramHeading": "Instagram",
+    "emptyHeading": "Contenido multimedia próximamente",
+    "emptyBody": "Estamos preparando videos, fotos y más contenido. Vuelve pronto para descubrir ciencia en formato audiovisual."
+  }
+}

@@ -1,5 +1,6 @@
 ---
 import settings from '../data/settings.json';
+import misc from '../data/content/misc.json';
 import Logo from './Logo.astro';
 import SocialIcon from './SocialIcon.astro';
 import Img from './Img.astro';
@@ -8,6 +9,7 @@ const year = new Date().getFullYear();
 const siteName = settings.siteName || 'Ciensite';
 const social = settings.social || {};
 const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
+const f = misc.footer;
 ---
 
 <footer class="bg-navy text-gray-300">
@@ -26,13 +28,13 @@ const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
           )}
         </a>
         <p class="text-sm text-gray-400 leading-relaxed">
-          Divulgación científica hecha por estudiantes mexicanos. Ciencia para todos, accesible y en español.
+          {f.tagline}
         </p>
       </div>
 
       <!-- Navegación -->
       <nav aria-label="Navegación del pie de página">
-        <h3 class="font-semibold text-warm-white mb-3 text-sm uppercase tracking-wider">Explorar</h3>
+        <h3 class="font-semibold text-warm-white mb-3 text-sm uppercase tracking-wider">{f.exploreHeading}</h3>
         <ul class="space-y-2">
           <li><a href="/articulos/" class="text-sm hover:text-teal transition-colors">Artículos</a></li>
           <li><a href="/multimedia/" class="text-sm hover:text-teal transition-colors">Multimedia</a></li>
@@ -44,7 +46,7 @@ const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
       <!-- Redes sociales -->
       {hasSocialLinks && (
         <div>
-          <h3 class="font-semibold text-warm-white mb-3 text-sm uppercase tracking-wider">Síguenos</h3>
+          <h3 class="font-semibold text-warm-white mb-3 text-sm uppercase tracking-wider">{f.followHeading}</h3>
           <div class="flex gap-3">
             {(['instagram', 'youtube', 'tiktok'] as const).map((p) => social[p] && (
               <a href={social[p]} target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-navy-light hover:bg-teal/20 transition-colors" aria-label={p.charAt(0).toUpperCase() + p.slice(1)}>
@@ -59,11 +61,11 @@ const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
     <!-- Créditos -->
     <div class="pt-8 border-t border-gray-700/50 flex flex-col sm:flex-row items-center justify-between gap-3">
       <p class="text-sm text-gray-400">
-        &copy; {year} {siteName}. Todos los derechos reservados.
+        &copy; {year} {siteName}. {f.copyrightSuffix}
       </p>
       <p class="text-sm text-gray-400 flex items-center gap-3">
         <a href="/admin/" class="text-gray-500 hover:text-teal transition-colors" aria-label="Administrar contenido del sitio">
-          Administrar
+          {f.adminLabel}
         </a>
         <span class="text-gray-600">·</span>
         <span>Desarrollado por <a href="https://github.com/IsokGta7" target="_blank" rel="noopener noreferrer" class="text-teal hover:underline">Isaac Rodríguez</a></span>

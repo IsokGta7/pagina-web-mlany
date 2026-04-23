@@ -5,24 +5,26 @@ import Footer from '../components/Footer.astro';
 import InstagramEmbed from '../components/InstagramEmbed.astro';
 import Img from '../components/Img.astro';
 import multimedia from '../data/multimedia.json';
+import misc from '../data/content/misc.json';
 
 const videos = multimedia.videos || [];
 const photos = multimedia.gallery || [];
 const instagramPosts = multimedia.instagramPosts || [];
 const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.length > 0;
+const t = misc.multimedia;
 ---
 
-<BaseLayout title="Multimedia" description="Videos, fotos y contenido multimedia de Ciensite. Ciencia que se ve, se escucha y se comparte.">
+<BaseLayout title={t.heading} description="Videos, fotos y contenido multimedia. Ciencia que se ve, se escucha y se comparte.">
   <Header />
 
   <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16 fade-in">
       <div class="text-center mb-10">
         <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
-          Multimedia
+          {t.heading}
         </h1>
         <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          Contenido audiovisual para aprender ciencia de forma entretenida.
+          {t.subtitle}
         </p>
       </div>
 
@@ -32,10 +34,10 @@ const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.leng
             <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
           </svg>
           <p class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-2">
-            Contenido multimedia próximamente
+            {t.emptyHeading}
           </p>
           <p class="text-sm text-gray-400 dark:text-gray-500 max-w-md mx-auto">
-            Estamos preparando videos, fotos y más contenido. Vuelve pronto para descubrir ciencia en formato audiovisual.
+            {t.emptyBody}
           </p>
         </div>
       )}
@@ -43,7 +45,7 @@ const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.leng
       <!-- Videos -->
       {videos.length > 0 && (
         <>
-          <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Videos</h2>
+          <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">{t.videosHeading}</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {videos.map((video) => (
               <div class="bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
@@ -70,7 +72,7 @@ const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.leng
     <!-- Galería -->
     {photos.length > 0 && (
       <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
-        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Galería</h2>
+        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">{t.galleryHeading}</h2>
         <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
           {photos.map((photo, i) => (
             <button
@@ -94,7 +96,7 @@ const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.leng
     <!-- Instagram -->
     {instagramPosts.length > 0 && (
       <section class="max-w-6xl mx-auto px-4 pb-16 fade-in">
-        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Instagram</h2>
+        <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">{t.instagramHeading}</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {instagramPosts.map((post) => (
             <InstagramEmbed postUrl={post.url} />

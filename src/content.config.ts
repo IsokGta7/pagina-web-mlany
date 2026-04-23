@@ -1,5 +1,8 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import categoriesData from './data/categories.json';
+
+const validCategories = categoriesData.items.map((c) => c.name);
 
 const articulos = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/articulos' }),
@@ -7,7 +10,9 @@ const articulos = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
-    category: z.enum(['Biología', 'Física', 'Química', 'Tecnología', 'Medio Ambiente']),
+    category: z.string().refine((c) => validCategories.includes(c), {
+      message: `La categoría debe ser una de: ${validCategories.join(', ')}. Edita src/data/categories.json para agregar más.`,
+    }),
     coverImage: z.string(),
     coverImageAlt: z.string().optional(),
     author: z.string(),

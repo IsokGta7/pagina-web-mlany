@@ -1,5 +1,5 @@
 ---
-// Componente de búsqueda integrado con Pagefind
+import articlesContent from '../data/content/articles.json';
 ---
 
 <div class="relative" id="search-container">
@@ -10,9 +10,9 @@
     <input
       type="search"
       id="search-input"
-      placeholder="Buscar artículos..."
+      placeholder={articlesContent.list.searchPlaceholder}
       class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-navy-light text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal transition-colors text-sm"
-      aria-label="Buscar artículos"
+      aria-label={articlesContent.list.searchPlaceholder}
       autocomplete="off"
     />
   </div>
@@ -20,8 +20,7 @@
   </div>
 </div>
 
-<script is:inline>
-  // Inicializar Pagefind cuando esté disponible
+<script is:inline define:vars={{ noResultsLabel: articlesContent.list.noSearchResults }}>
   (async () => {
     const input = document.getElementById('search-input');
     const resultsContainer = document.getElementById('search-results');
@@ -53,7 +52,7 @@
         const results = await Promise.all(search.results.slice(0, 6).map(r => r.data()));
 
         if (results.length === 0) {
-          resultsContainer.innerHTML = '<p class="p-4 text-sm text-gray-500">No se encontraron resultados.</p>';
+          resultsContainer.innerHTML = `<p class="p-4 text-sm text-gray-500">${noResultsLabel}</p>`;
         } else {
           resultsContainer.innerHTML = results.map(r => `
             <a href="${r.url}" class="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-navy border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors">

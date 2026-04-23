@@ -1,0 +1,9 @@
+{
+  "items": [
+    { "name": "Biología" },
+    { "name": "Física" },
+    { "name": "Química" },
+    { "name": "Tecnología" },
+    { "name": "Medio Ambiente" }
+  ]
+}
