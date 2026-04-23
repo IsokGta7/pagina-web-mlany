@@ -1,0 +1,63 @@
+---
+import settings from '../data/settings.json';
+
+const banner = settings.cookieBanner || {};
+const enabled = banner.enabled !== false;
+const title = banner.title || 'Cookies';
+const body = banner.body || 'Usamos cookies para analizar el tráfico del sitio y mejorar tu experiencia. Puedes aceptar o rechazar las cookies analíticas.';
+const acceptLabel = banner.acceptLabel || 'Aceptar';
+const rejectLabel = banner.rejectLabel || 'Rechazar';
+const privacyLinkLabel = banner.privacyLinkLabel || 'Política de privacidad';
+---
+
+{enabled && (
+  <div
+    id="cookie-banner"
+    class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-50 p-5 rounded-2xl bg-white dark:bg-navy-light border border-gray-200 dark:border-gray-700 shadow-2xl hidden"
+    role="dialog"
+    aria-labelledby="cookie-banner-title"
+    aria-describedby="cookie-banner-body"
+  >
+    <h2 id="cookie-banner-title" class="font-semibold text-navy dark:text-warm-white mb-2">{title}</h2>
+    <p id="cookie-banner-body" class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+      {body}{' '}
+      <a href="/privacidad/" class="text-teal hover:underline">{privacyLinkLabel}</a>.
+    </p>
+    <div class="flex gap-2">
+      <button
+        id="cookie-accept"
+        type="button"
+        class="flex-1 px-4 py-2 rounded-lg bg-teal text-navy font-semibold text-sm hover:bg-teal-dark transition-colors"
+      >
+        {acceptLabel}
+      </button>
+      <button
+        id="cookie-reject"
+        type="button"
+        class="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+      >
+        {rejectLabel}
+      </button>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var banner = document.getElementById('cookie-banner');
+      if (!banner) return;
+      if (!localStorage.getItem('cookie-consent')) {
+        banner.classList.remove('hidden');
+      }
+      document.getElementById('cookie-accept')?.addEventListener('click', function () {
+        localStorage.setItem('cookie-consent', 'accepted');
+        banner.remove();
+        // Reload to initialize analytics if they're gated on consent
+        window.location.reload();
+      });
+      document.getElementById('cookie-reject')?.addEventListener('click', function () {
+        localStorage.setItem('cookie-consent', 'rejected');
+        banner.remove();
+      });
+    })();
+  </script>
+)}

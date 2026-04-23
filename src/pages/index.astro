@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
 import SocialIcon from '../components/SocialIcon.astro';
 import Background from '../components/Background.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
 import settings from '../data/settings.json';
@@ -110,6 +111,8 @@ function renderBold(text: string): string {
         </a>
       </div>
     </section>
+
+    <Newsletter />
 
     <!-- Sobre nosotros -->
     <section class="relative bg-gray-100 dark:bg-navy-light overflow-hidden fade-in">

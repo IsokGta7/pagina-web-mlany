@@ -44,4 +44,12 @@ const equipo = defineCollection({
   }),
 });
 
-export const collections = { articulos, equipo };
+const legal = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/legal' }),
+  schema: z.object({
+    title: z.string(),
+    lastUpdated: z.coerce.date(),
+  }),
+});
+
+export const collections = { articulos, equipo, legal };

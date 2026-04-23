@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import settings from '../data/settings.json';
+import CookieBanner from '../components/CookieBanner.astro';
 
 interface Props {
   title: string;
@@ -119,6 +120,8 @@ const colorOverrides = `:root {
     </a>
 
     <slot />
+
+    <CookieBanner />
 
     <!-- Netlify Identity: solo cargar cuando se acepta una invitación -->
     <script is:inline>
