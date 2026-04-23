@@ -149,7 +149,7 @@ collections:
             required: false
             fields:
               - { label: "Activado", name: enabled, widget: boolean, default: false, hint: "Actívalo solo cuando tengas una cuenta en Mailchimp / Buttondown / etc." }
-              - { label: "URL del formulario (action)", name: actionUrl, widget: string, required: false, hint: "URL a la que se envía el email. Ej: https://example.us12.list-manage.com/subscribe/post?u=XXX&id=YYY" }
+              - { label: "URL del formulario (action)", name: actionUrl, widget: string, required: false, hint: "Mailchimp, Buttondown, Substack, ConvertKit, MailerLite y Beehiiv ya están permitidos en la política de seguridad. Si usas otro proveedor, pide al desarrollador que lo agregue a form-action en public/_headers." }
               - { label: "Título", name: title, widget: string, default: "Suscríbete" }
               - { label: "Subtítulo", name: subtitle, widget: text }
               - { label: "Placeholder del campo correo", name: emailPlaceholder, widget: string, default: "tu@correo.com" }
