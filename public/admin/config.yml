@@ -2,6 +2,8 @@ backend:
   name: git-gateway
   branch: master
 
+publish_mode: editorial_workflow
+
 media_folder: public/uploads
 public_folder: /uploads
 
@@ -29,7 +31,38 @@ collections:
           - Tecnología
           - Medio Ambiente
       - { label: "Imagen de portada", name: coverImage, widget: image }
-      - { label: "Autor", name: author, widget: string }
+      - { label: "Autor (nombre visible)", name: author, widget: string }
+      - label: "Autor del equipo (opcional)"
+        name: authorRef
+        widget: relation
+        required: false
+        collection: equipo
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
+        hint: "Vincula a un miembro del equipo para mostrar su perfil en el artículo"
+      - { label: "Borrador", name: draft, widget: boolean, default: false, hint: "Marca para ocultar el artículo del sitio público" }
+      - { label: "Destacado", name: featured, widget: boolean, default: false, hint: "Marca para promocionar en la página de inicio" }
+      - label: "Etiquetas"
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: "Etiquetas adicionales a la categoría principal"
+      - label: "Artículos relacionados (opcional)"
+        name: relatedArticles
+        widget: relation
+        required: false
+        multiple: true
+        max: 3
+        collection: articulos
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        hint: "Si dejas vacío, se mostrarán automáticamente artículos de la misma categoría"
+      - { label: "Título SEO", name: seoTitle, widget: string, required: false, hint: "Opcional. Sobrescribe el título para buscadores y redes sociales" }
+      - { label: "Descripción SEO", name: seoDescription, widget: text, required: false, hint: "Opcional. Sobrescribe la descripción para buscadores y redes sociales" }
+      - { label: "Imagen para compartir (1200x630)", name: seoOgImage, widget: image, required: false, hint: "Opcional. Sobrescribe la imagen de portada al compartir en redes" }
       - { label: "Contenido", name: body, widget: markdown }
 
   - name: equipo

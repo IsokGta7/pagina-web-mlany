@@ -8,6 +8,7 @@ import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../../utils/readTime';
 
 const rawArticulos = (await getCollection('articulos'))
+  .filter((a) => !a.data.draft)
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const allArticulos = await Promise.all(
