@@ -94,3 +94,47 @@ html.dark .prose strong {
 html.dark .prose a {
   color: var(--color-teal);
 }
+
+/* Estilos para impresión */
+@media print {
+  header, footer, nav, #reading-progress, #toc, #cookie-banner, #giscus-container,
+  .lightbox-trigger, [id^="form-success"], [id^="form-error"] {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  article {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .prose {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .prose h1, .prose h2, .prose h3 {
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .prose a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+
+  .prose a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+}
