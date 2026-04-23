@@ -21,5 +21,29 @@
     "category": "General",
     "categoryId": "",
     "mapping": "pathname"
+  },
+  "cookieBanner": {
+    "enabled": true,
+    "title": "Cookies",
+    "body": "Usamos cookies para analizar el tráfico del sitio y mejorar tu experiencia. Puedes aceptar o rechazar las cookies analíticas en cualquier momento.",
+    "acceptLabel": "Aceptar",
+    "rejectLabel": "Rechazar",
+    "privacyLinkLabel": "Política de privacidad"
+  },
+  "newsletter": {
+    "enabled": false,
+    "actionUrl": "",
+    "title": "Suscríbete",
+    "subtitle": "Recibe nuestros artículos directamente en tu correo.",
+    "emailPlaceholder": "tu@correo.com",
+    "submitLabel": "Suscribirme",
+    "successMessage": "¡Gracias por suscribirte!"
+  },
+  "analytics": {
+    "ga4Id": ""
+  },
+  "seo": {
+    "defaultDescription": "",
+    "disallowPaths": []
   }
 }

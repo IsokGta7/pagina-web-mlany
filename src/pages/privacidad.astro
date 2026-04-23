@@ -1,0 +1,12 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('legal', 'privacidad');
+if (!entry) throw new Error('Missing legal/privacidad.md');
+const { Content } = await render(entry);
+---
+
+<LegalLayout title={entry.data.title} lastUpdated={entry.data.lastUpdated}>
+  <Content />
+</LegalLayout>

@@ -1,7 +1,9 @@
 ---
 import SocialIcon from './SocialIcon.astro';
+import Img from './Img.astro';
 
 interface Props {
+  id?: string;
   name: string;
   role: string;
   bio: string;
@@ -13,7 +15,7 @@ interface Props {
   };
 }
 
-const { name, role, bio, photo, socialLinks } = Astro.props;
+const { id, name, role, bio, photo, socialLinks } = Astro.props;
 
 const teamPlatforms = [
   { key: 'instagram', label: 'Instagram' },
@@ -22,12 +24,12 @@ const teamPlatforms = [
 ] as const;
 ---
 
-<article class="text-center p-6 bg-white dark:bg-navy-light rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300">
-  <img
+<article id={id} class="text-center p-6 bg-white dark:bg-navy-light rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 scroll-mt-20">
+  <Img
     src={photo}
     alt={`Foto de ${name}`}
     class="w-28 h-28 rounded-full mx-auto mb-4 object-cover ring-4 ring-teal/20"
-    loading="lazy"
+    sizes="112px"
   />
   <h3 class="font-serif text-lg font-bold text-navy dark:text-warm-white mb-1">{name}</h3>
   <p class="text-sm text-teal font-medium mb-3">{role}</p>

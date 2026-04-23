@@ -2,6 +2,8 @@ backend:
   name: git-gateway
   branch: master
 
+publish_mode: editorial_workflow
+
 media_folder: public/uploads
 public_folder: /uploads
 
@@ -21,15 +23,46 @@ collections:
       - { label: "Fecha de publicación", name: date, widget: datetime, format: "YYYY-MM-DD" }
       - label: "Categoría"
         name: category
-        widget: select
-        options:
-          - Biología
-          - Física
-          - Química
-          - Tecnología
-          - Medio Ambiente
+        widget: relation
+        collection: configuracion
+        file: categorias
+        search_fields: ["items.*.name"]
+        value_field: "items.*.name"
+        display_fields: ["items.*.name"]
       - { label: "Imagen de portada", name: coverImage, widget: image }
-      - { label: "Autor", name: author, widget: string }
+      - { label: "Texto alternativo de la portada", name: coverImageAlt, widget: string, required: false, hint: "Describe la imagen brevemente para accesibilidad y SEO. Si lo dejas vacío, se usará el título del artículo." }
+      - { label: "Autor (nombre visible)", name: author, widget: string }
+      - label: "Autor del equipo (opcional)"
+        name: authorRef
+        widget: relation
+        required: false
+        collection: equipo
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
+        hint: "Vincula a un miembro del equipo para mostrar su perfil en el artículo"
+      - { label: "Borrador", name: draft, widget: boolean, default: false, hint: "Marca para ocultar el artículo del sitio público" }
+      - { label: "Destacado", name: featured, widget: boolean, default: false, hint: "Marca para promocionar en la página de inicio" }
+      - label: "Etiquetas"
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: "Etiquetas adicionales a la categoría principal"
+      - label: "Artículos relacionados (opcional)"
+        name: relatedArticles
+        widget: relation
+        required: false
+        multiple: true
+        max: 3
+        collection: articulos
+        search_fields: ["title"]
+        value_field: "{{slug}}"
+        display_fields: ["title"]
+        hint: "Si dejas vacío, se mostrarán automáticamente artículos de la misma categoría"
+      - { label: "Título SEO", name: seoTitle, widget: string, required: false, hint: "Opcional. Sobrescribe el título para buscadores y redes sociales" }
+      - { label: "Descripción SEO", name: seoDescription, widget: text, required: false, hint: "Opcional. Sobrescribe la descripción para buscadores y redes sociales" }
+      - { label: "Imagen para compartir (1200x630)", name: seoOgImage, widget: image, required: false, hint: "Opcional. Sobrescribe la imagen de portada al compartir en redes" }
       - { label: "Contenido", name: body, widget: markdown }
 
   - name: equipo
@@ -54,7 +87,25 @@ collections:
           - { label: "Twitter / X", name: twitter, widget: string, required: false }
           - { label: "LinkedIn", name: linkedin, widget: string, required: false }
 
-  - name: settings
+  - name: legal
+    label: Páginas legales
+    files:
+      - name: privacidad
+        label: Política de privacidad
+        file: src/content/legal/privacidad.md
+        fields:
+          - { label: "Título", name: title, widget: string, default: "Política de privacidad" }
+          - { label: "Última actualización", name: lastUpdated, widget: datetime, format: "YYYY-MM-DD" }
+          - { label: "Contenido", name: body, widget: markdown }
+      - name: terminos
+        label: Términos de servicio
+        file: src/content/legal/terminos.md
+        fields:
+          - { label: "Título", name: title, widget: string, default: "Términos de servicio" }
+          - { label: "Última actualización", name: lastUpdated, widget: datetime, format: "YYYY-MM-DD" }
+          - { label: "Contenido", name: body, widget: markdown }
+
+  - name: configuracion
     label: Configuración
     files:
       - name: theme
@@ -96,9 +147,208 @@ collections:
                 widget: select
                 default: pathname
                 options: [pathname, url, title, og:title, specific, number]
+          - label: "Banner de cookies"
+            name: cookieBanner
+            widget: object
+            required: false
+            fields:
+              - { label: "Activado", name: enabled, widget: boolean, default: true }
+              - { label: "Título", name: title, widget: string, default: "Cookies" }
+              - { label: "Mensaje", name: body, widget: text }
+              - { label: "Botón aceptar", name: acceptLabel, widget: string, default: "Aceptar" }
+              - { label: "Botón rechazar", name: rejectLabel, widget: string, default: "Rechazar" }
+              - { label: "Texto enlace privacidad", name: privacyLinkLabel, widget: string, default: "Política de privacidad" }
+          - label: "Newsletter"
+            name: newsletter
+            widget: object
+            required: false
+            fields:
+              - { label: "Activado", name: enabled, widget: boolean, default: false, hint: "Actívalo solo cuando tengas una cuenta en Mailchimp / Buttondown / etc." }
+              - { label: "URL del formulario (action)", name: actionUrl, widget: string, required: false, hint: "Mailchimp, Buttondown, Substack, ConvertKit, MailerLite y Beehiiv ya están permitidos en la política de seguridad. Si usas otro proveedor, pide al desarrollador que lo agregue a form-action en public/_headers." }
+              - { label: "Título", name: title, widget: string, default: "Suscríbete" }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Placeholder del campo correo", name: emailPlaceholder, widget: string, default: "tu@correo.com" }
+              - { label: "Texto del botón", name: submitLabel, widget: string, default: "Suscribirme" }
+              - { label: "Mensaje de éxito", name: successMessage, widget: string, default: "¡Gracias por suscribirte!" }
+          - label: "Analítica"
+            name: analytics
+            widget: object
+            required: false
+            fields:
+              - { label: "ID de Google Analytics 4", name: ga4Id, widget: string, required: false, hint: "Empieza con 'G-'. Ej: G-XXXXXXXXXX. Déjalo vacío para desactivar." }
+          - label: "SEO"
+            name: seo
+            widget: object
+            required: false
+            fields:
+              - { label: "Descripción por defecto del sitio", name: defaultDescription, widget: text, required: false, hint: "Descripción meta que aparece en buscadores y al compartir (opcional)" }
+              - label: "Rutas a bloquear en robots.txt"
+                name: disallowPaths
+                widget: list
+                required: false
+                default: []
+                hint: "Rutas que no quieres que Google indexe. Ej: /admin/, /privada/"
+
+      - name: categorias
+        label: Categorías de artículos
+        file: src/data/categories.json
+        fields:
+          - label: "Categorías"
+            name: items
+            widget: list
+            fields:
+              - { label: "Nombre", name: name, widget: string }
+
+      - name: home
+        label: Página de inicio
+        file: src/data/content/home.json
+        fields:
+          - label: "Hero (sección principal)"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Título principal", name: title, widget: string }
+              - { label: "Palabra destacada", name: highlight, widget: string, required: false, hint: "Aparece en color de acento después del título" }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Botón principal", name: primaryCta, widget: string }
+              - { label: "Botón Instagram", name: secondaryCta, widget: string, required: false }
+              - label: "Fondo decorativo"
+                name: background
+                widget: select
+                options: [atomic, molecular, geometric, minimal, none]
+                default: atomic
+          - label: "Últimas publicaciones"
+            name: latest
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Texto del enlace 'Ver todos'", name: viewAllLabel, widget: string }
+          - label: "Sobre nosotros"
+            name: about
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Primer párrafo", name: paragraph1, widget: text, hint: "Usa **texto** para resaltar en negrita" }
+              - { label: "Segundo párrafo", name: paragraph2, widget: text }
+              - { label: "Botón", name: ctaLabel, widget: string }
+              - label: "Fondo decorativo"
+                name: background
+                widget: select
+                options: [atomic, molecular, geometric, minimal, none]
+                default: molecular
+          - label: "Sección Síguenos"
+            name: followUs
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+
+      - name: articulos_page
+        label: Página de artículos
+        file: src/data/content/articles.json
+        fields:
+          - label: "Listado de artículos"
+            name: list
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Etiqueta 'Todos'", name: allCategoriesLabel, widget: string }
+              - { label: "Placeholder de búsqueda", name: searchPlaceholder, widget: string }
+              - { label: "Mensaje sin resultados (filtro)", name: noResults, widget: string }
+              - { label: "Mensaje sin resultados (búsqueda)", name: noSearchResults, widget: string }
+          - label: "Página del artículo"
+            name: article
+            widget: object
+            fields:
+              - { label: "Etiqueta 'min de lectura'", name: readTimeLabel, widget: string }
+              - { label: "Etiqueta 'Por'", name: byLabel, widget: string }
+              - { label: "Encabezado compartir", name: shareHeading, widget: string }
+              - { label: "Texto botón copiar", name: copyLinkLabel, widget: string }
+              - { label: "Mensaje al copiar", name: copiedLabel, widget: string }
+              - { label: "Encabezado relacionados", name: relatedHeading, widget: string }
+
+      - name: contact
+        label: Página de contacto
+        file: src/data/content/contact.json
+        fields:
+          - { label: "Encabezado", name: heading, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - label: "Formulario"
+            name: form
+            widget: object
+            fields:
+              - { label: "Etiqueta Nombre", name: nameLabel, widget: string }
+              - { label: "Placeholder Nombre", name: namePlaceholder, widget: string }
+              - { label: "Etiqueta Correo", name: emailLabel, widget: string }
+              - { label: "Placeholder Correo", name: emailPlaceholder, widget: string }
+              - { label: "Etiqueta Asunto", name: subjectLabel, widget: string }
+              - { label: "Placeholder Asunto", name: subjectPlaceholder, widget: string }
+              - { label: "Etiqueta Mensaje", name: messageLabel, widget: string }
+              - { label: "Placeholder Mensaje", name: messagePlaceholder, widget: string }
+              - { label: "Texto botón enviar", name: submitLabel, widget: string }
+              - { label: "Texto botón enviando", name: submittingLabel, widget: string }
+              - { label: "Mensaje de éxito", name: successMessage, widget: text }
+              - { label: "Mensaje de error", name: errorMessage, widget: text }
+          - label: "Información de contacto"
+            name: info
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Ubicación", name: location, widget: string, required: false }
+              - { label: "Correo electrónico", name: email, widget: string, required: false }
+              - { label: "Instagram (handle)", name: instagramHandle, widget: string, required: false }
+          - { label: "URL del mapa (Google Maps embed src)", name: mapEmbedUrl, widget: string, required: false, hint: "En Google Maps → Compartir → Insertar mapa → copia solo el valor de src=\"...\"" }
+
+      - name: team
+        label: Página de equipo
+        file: src/data/content/team.json
+        fields:
+          - { label: "Encabezado", name: heading, widget: string }
+          - { label: "Subtítulo", name: subtitle, widget: text }
+          - label: "Llamada a unirse"
+            name: joinCta
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Texto", name: body, widget: text }
+              - { label: "Botón", name: label, widget: string }
+
+      - name: misc
+        label: Footer, 404, Multimedia
+        file: src/data/content/misc.json
+        fields:
+          - label: "Footer"
+            name: footer
+            widget: object
+            fields:
+              - { label: "Eslogan", name: tagline, widget: text }
+              - { label: "Encabezado 'Explorar'", name: exploreHeading, widget: string }
+              - { label: "Encabezado 'Síguenos'", name: followHeading, widget: string }
+              - { label: "Sufijo copyright", name: copyrightSuffix, widget: string }
+              - { label: "Etiqueta 'Administrar'", name: adminLabel, widget: string }
+          - label: "Página 404"
+            name: notFound
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Mensaje", name: body, widget: text }
+              - { label: "Botón volver", name: backHomeLabel, widget: string }
+          - label: "Página de multimedia"
+            name: multimedia
+            widget: object
+            fields:
+              - { label: "Encabezado", name: heading, widget: string }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Encabezado Videos", name: videosHeading, widget: string }
+              - { label: "Encabezado Galería", name: galleryHeading, widget: string }
+              - { label: "Encabezado Instagram", name: instagramHeading, widget: string }
+              - { label: "Encabezado estado vacío", name: emptyHeading, widget: string }
+              - { label: "Mensaje estado vacío", name: emptyBody, widget: text }
 
       - name: multimedia
-        label: Multimedia
+        label: Multimedia (videos, galería, Instagram)
         file: src/data/multimedia.json
         fields:
           - label: "Videos de YouTube"
@@ -114,7 +364,7 @@ collections:
             required: false
             fields:
               - { label: "Foto", name: src, widget: image }
-              - { label: "Descripción", name: alt, widget: string }
+              - { label: "Descripción (texto alternativo)", name: alt, widget: string, required: true, hint: "Describe la imagen para accesibilidad" }
           - label: "Posts de Instagram"
             name: instagramPosts
             widget: list

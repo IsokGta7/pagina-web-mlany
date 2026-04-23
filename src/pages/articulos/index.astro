@@ -6,8 +6,11 @@ import ArticuloCard from '../../components/ArticuloCard.astro';
 import SearchBar from '../../components/SearchBar.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../../utils/readTime';
+import articlesContent from '../../data/content/articles.json';
+import categoriesData from '../../data/categories.json';
 
 const rawArticulos = (await getCollection('articulos'))
+  .filter((a) => !a.data.draft)
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const allArticulos = await Promise.all(
@@ -17,22 +20,21 @@ const allArticulos = await Promise.all(
   })
 );
 
-const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 'Medio Ambiente'];
-
+const categories = [articlesContent.list.allCategoriesLabel, ...categoriesData.items.map((c) => c.name)];
 ---
 
-<BaseLayout title="Artículos" description="Explora nuestros artículos sobre ciencia, tecnología y medio ambiente. Divulgación científica en español.">
+<BaseLayout title={articlesContent.list.heading} description="Explora nuestros artículos sobre ciencia, tecnología y medio ambiente. Divulgación científica en español.">
   <Header />
 
-  <main class="flex-1">
+  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
       <!-- Encabezado -->
       <div class="text-center mb-10">
         <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
-          Artículos
+          {articlesContent.list.heading}
         </h1>
         <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          Ciencia explicada de forma clara y accesible. Filtra por categoría o busca un tema específico.
+          {articlesContent.list.subtitle}
         </p>
       </div>
 
@@ -47,7 +49,7 @@ const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 
           <button
             class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal hover:text-teal cursor-pointer data-[active=true]:bg-teal data-[active=true]:text-navy data-[active=true]:border-teal"
             data-category={cat}
-            data-active={cat === 'Todos' ? 'true' : 'false'}
+            data-active={cat === articlesContent.list.allCategoriesLabel ? 'true' : 'false'}
           >
             {cat}
           </button>
@@ -64,6 +66,7 @@ const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 
               date={articulo.data.date}
               category={articulo.data.category}
               coverImage={articulo.data.coverImage}
+              coverImageAlt={articulo.data.coverImageAlt}
               slug={articulo.id}
               readTime={articulo.readTime}
             />
@@ -73,15 +76,14 @@ const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 
 
       <!-- Mensaje sin resultados -->
       <p id="no-results" class="hidden text-center text-gray-500 dark:text-gray-400 py-12">
-        No se encontraron artículos en esta categoría.
+        {articlesContent.list.noResults}
       </p>
     </section>
   </main>
 
   <Footer />
 
-  <script is:inline>
-    // Filtrado por categoría
+  <script is:inline define:vars={{ allLabel: articlesContent.list.allCategoriesLabel }}>
     const buttons = document.querySelectorAll('.category-btn');
     const items = document.querySelectorAll('.article-item');
     const noResults = document.getElementById('no-results');
@@ -90,19 +92,16 @@ const categories = ['Todos', 'Biología', 'Física', 'Química', 'Tecnología', 
       btn.addEventListener('click', () => {
         const category = btn.dataset.category;
 
-        // Actualizar estado activo
         buttons.forEach((b) => b.dataset.active = 'false');
         btn.dataset.active = 'true';
 
-        // Filtrar artículos
         let visibleCount = 0;
         items.forEach((item) => {
-          const show = category === 'Todos' || item.dataset.category === category;
+          const show = category === allLabel || item.dataset.category === category;
           item.style.display = show ? '' : 'none';
           if (show) visibleCount++;
         });
 
-        // Mostrar mensaje si no hay resultados
         if (noResults) {
           noResults.classList.toggle('hidden', visibleCount > 0);
         }
