@@ -6,6 +6,7 @@ import ArticuloCard from '../components/ArticuloCard.astro';
 import Img from '../components/Img.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
+import settings from '../data/settings.json';
 import articlesContent from '../data/content/articles.json';
 
 interface Props {
@@ -16,10 +17,31 @@ interface Props {
   coverImage: string;
   coverImageAlt?: string;
   author: string;
+  authorRef?: string;
   slug: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoOgImage?: string;
+  relatedArticles?: string[];
+  tags?: string[];
 }
 
-const { title, description, date, category, coverImage, coverImageAlt, author, slug } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  category,
+  coverImage,
+  coverImageAlt,
+  author,
+  authorRef,
+  slug,
+  seoTitle,
+  seoDescription,
+  seoOgImage,
+  relatedArticles = [],
+  tags = [],
+} = Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString('es-MX', {
   year: 'numeric',
@@ -27,20 +49,73 @@ const formattedDate = new Date(date).toLocaleDateString('es-MX', {
   day: 'numeric',
 });
 
-// Artículos relacionados (misma categoría, excluyendo el actual)
-const allArticulos = await getCollection('articulos');
-const related = allArticulos
-  .filter((a) => a.data.category === category && a.id !== slug)
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 2);
+// Resolve author: prefer authorRef to team member, fall back to author string
+let authorDisplayName = author;
+let authorLink: string | undefined;
+if (authorRef) {
+  const team = await getCollection('equipo');
+  const match = team.find((m) => m.id === authorRef);
+  if (match) {
+    authorDisplayName = match.data.name;
+    authorLink = `/equipo/#${authorRef}`;
+  }
+}
+
+// Related articles: manual picks first, else category-based auto-related
+const allArticulos = (await getCollection('articulos')).filter((a) => !a.data.draft);
+let related;
+if (relatedArticles.length > 0) {
+  related = relatedArticles
+    .map((rid) => allArticulos.find((a) => a.id === rid))
+    .filter((a): a is NonNullable<typeof a> => a !== undefined && a.id !== slug)
+    .slice(0, 3);
+} else {
+  related = allArticulos
+    .filter((a) => a.data.category === category && a.id !== slug)
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 2);
+}
 
 // URL para compartir
 const shareUrl = Astro.url.href;
 const encodedUrl = encodeURIComponent(shareUrl);
 const encodedTitle = encodeURIComponent(title);
+
+// SEO resolution
+const metaTitle = seoTitle || title;
+const metaDescription = seoDescription || description;
+const metaOgImage = seoOgImage || coverImage;
+
+// JSON-LD structured data
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.mx';
+const ogImageAbsolute = metaOgImage.startsWith('http') ? metaOgImage : `${siteUrl}${metaOgImage}`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  image: ogImageAbsolute,
+  datePublished: new Date(date).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: authorDisplayName,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: settings.siteName || 'Ciensite',
+    logo: settings.logo ? {
+      '@type': 'ImageObject',
+      url: settings.logo.startsWith('http') ? settings.logo : `${siteUrl}${settings.logo}`,
+    } : undefined,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': shareUrl,
+  },
+};
 ---
 
-<BaseLayout title={title} description={description} ogImage={coverImage}>
+<BaseLayout title={metaTitle} description={metaDescription} ogImage={metaOgImage}>
   <Header />
 
   <!-- Barra de progreso de lectura -->
@@ -61,9 +136,15 @@ const encodedTitle = encodeURIComponent(title);
           {title}
         </h1>
         <div class="flex items-center gap-4 text-gray-500 dark:text-gray-400 text-sm">
-          <span>{articlesContent.article.byLabel} <strong class="text-gray-700 dark:text-gray-200">{author}</strong></span>
+          <span>
+            {articlesContent.article.byLabel} {authorLink ? (
+              <a href={authorLink} class="text-gray-700 dark:text-gray-200 font-semibold hover:text-teal transition-colors">{authorDisplayName}</a>
+            ) : (
+              <strong class="text-gray-700 dark:text-gray-200">{authorDisplayName}</strong>
+            )}
+          </span>
           <span>•</span>
-          <time datetime={date.toISOString()}>{formattedDate}</time>
+          <time datetime={new Date(date).toISOString()}>{formattedDate}</time>
         </div>
       </header>
 
@@ -99,6 +180,16 @@ const encodedTitle = encodeURIComponent(title);
       <div id="article-body" class="prose prose-lg max-w-none dark:prose-invert prose-headings:font-serif prose-a:text-teal prose-a:no-underline hover:prose-a:underline">
         <slot />
       </div>
+
+      {tags.length > 0 && (
+        <div class="mt-10 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="inline-block px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-navy-light text-gray-600 dark:text-gray-300 rounded-full">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
 
       <!-- Botones de compartir -->
       <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
@@ -161,6 +252,8 @@ const encodedTitle = encodeURIComponent(title);
   </main>
 
   <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <script is:inline define:vars={{ copiedLabel: articlesContent.article.copiedLabel, copyLabel: articlesContent.article.copyLinkLabel }}>
     document.getElementById('copy-link-btn')?.addEventListener('click', async () => {

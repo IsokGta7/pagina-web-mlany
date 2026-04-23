@@ -17,7 +17,12 @@ const socialPlatforms = [
 ] as const;
 
 const allArticulos = (await getCollection('articulos'))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .filter((a) => !a.data.draft)
+  .sort((a, b) => {
+    if (a.data.featured && !b.data.featured) return -1;
+    if (!a.data.featured && b.data.featured) return 1;
+    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+  })
   .slice(0, 3);
 
 const articulos = allArticulos.map((a) => ({

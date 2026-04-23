@@ -16,6 +16,15 @@ const articulos = defineCollection({
     coverImage: z.string(),
     coverImageAlt: z.string().optional(),
     author: z.string(),
+    // Power features (all optional for backward compatibility)
+    draft: z.boolean().optional().default(false),
+    featured: z.boolean().optional().default(false),
+    tags: z.array(z.string()).optional().default([]),
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
+    seoOgImage: z.string().optional(),
+    authorRef: z.string().optional(),
+    relatedArticles: z.array(z.string()).optional().default([]),
   }),
 });
 

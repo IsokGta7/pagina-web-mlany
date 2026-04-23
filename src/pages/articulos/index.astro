@@ -10,6 +10,7 @@ import articlesContent from '../../data/content/articles.json';
 import categoriesData from '../../data/categories.json';
 
 const rawArticulos = (await getCollection('articulos'))
+  .filter((a) => !a.data.draft)
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const allArticulos = await Promise.all(
