@@ -1,0 +1,18 @@
+{
+  "list": {
+    "heading": "Artículos",
+    "subtitle": "Ciencia explicada de forma clara y accesible. Filtra por categoría o busca un tema específico.",
+    "allCategoriesLabel": "Todos",
+    "searchPlaceholder": "Buscar artículos...",
+    "noResults": "No se encontraron artículos en esta categoría.",
+    "noSearchResults": "No se encontraron resultados."
+  },
+  "article": {
+    "readTimeLabel": "min de lectura",
+    "byLabel": "Por",
+    "shareHeading": "Compartir este artículo",
+    "copyLinkLabel": "Copiar enlace",
+    "copiedLabel": "¡Copiado!",
+    "relatedHeading": "Artículos relacionados"
+  }
+}
