@@ -1,12 +1,6 @@
 ---
 import settings from '../data/settings.json';
 
-interface Props {
-  variant?: 'default' | 'inline';
-}
-
-const { variant = 'default' } = Astro.props;
-
 const nl = settings.newsletter || {};
 const enabled = nl.enabled === true && nl.actionUrl;
 const title = nl.title || 'Suscríbete';
@@ -16,7 +10,7 @@ const submitLabel = nl.submitLabel || 'Suscribirme';
 const successMessage = nl.successMessage || '¡Gracias por suscribirte!';
 ---
 
-{enabled && variant === 'default' && (
+{enabled && (
   <section class="max-w-3xl mx-auto px-4 py-12 fade-in">
     <div class="bg-gray-100 dark:bg-navy-light rounded-2xl p-8 text-center">
       <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-2">{title}</h2>
@@ -38,20 +32,4 @@ const successMessage = nl.successMessage || '¡Gracias por suscribirte!';
       <p class="newsletter-success hidden mt-4 text-sm text-teal">{successMessage}</p>
     </div>
   </section>
-)}
-
-{enabled && variant === 'inline' && (
-  <form class="newsletter-form flex gap-2 mt-3" action={nl.actionUrl} method="POST" target="_blank" rel="noopener">
-    <input
-      name="email"
-      type="email"
-      required
-      placeholder={emailPlaceholder}
-      class="flex-1 px-3 py-2 rounded-lg bg-navy text-sm text-gray-200 border border-gray-700 focus:outline-none focus:border-teal"
-      aria-label={emailPlaceholder}
-    />
-    <button type="submit" class="px-4 py-2 rounded-lg bg-teal text-navy text-sm font-semibold hover:bg-teal-dark transition-colors">
-      {submitLabel}
-    </button>
-  </form>
 )}
