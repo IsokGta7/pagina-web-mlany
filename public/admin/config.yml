@@ -54,6 +54,24 @@ collections:
           - { label: "Twitter / X", name: twitter, widget: string, required: false }
           - { label: "LinkedIn", name: linkedin, widget: string, required: false }
 
+  - name: legal
+    label: Páginas legales
+    files:
+      - name: privacidad
+        label: Política de privacidad
+        file: src/content/legal/privacidad.md
+        fields:
+          - { label: "Título", name: title, widget: string, default: "Política de privacidad" }
+          - { label: "Última actualización", name: lastUpdated, widget: datetime, format: "YYYY-MM-DD" }
+          - { label: "Contenido", name: body, widget: markdown }
+      - name: terminos
+        label: Términos de servicio
+        file: src/content/legal/terminos.md
+        fields:
+          - { label: "Título", name: title, widget: string, default: "Términos de servicio" }
+          - { label: "Última actualización", name: lastUpdated, widget: datetime, format: "YYYY-MM-DD" }
+          - { label: "Contenido", name: body, widget: markdown }
+
   - name: settings
     label: Configuración
     files:
@@ -81,6 +99,29 @@ collections:
               - { label: "Instagram", name: instagram, widget: string, required: false, hint: "URL completa, ej: https://instagram.com/tu_cuenta" }
               - { label: "YouTube", name: youtube, widget: string, required: false, hint: "URL completa, ej: https://youtube.com/@tu_canal" }
               - { label: "TikTok", name: tiktok, widget: string, required: false, hint: "URL completa, ej: https://tiktok.com/@tu_cuenta" }
+          - label: "Banner de cookies"
+            name: cookieBanner
+            widget: object
+            required: false
+            fields:
+              - { label: "Activado", name: enabled, widget: boolean, default: true }
+              - { label: "Título", name: title, widget: string, default: "Cookies" }
+              - { label: "Mensaje", name: body, widget: text }
+              - { label: "Botón aceptar", name: acceptLabel, widget: string, default: "Aceptar" }
+              - { label: "Botón rechazar", name: rejectLabel, widget: string, default: "Rechazar" }
+              - { label: "Texto enlace privacidad", name: privacyLinkLabel, widget: string, default: "Política de privacidad" }
+          - label: "Newsletter"
+            name: newsletter
+            widget: object
+            required: false
+            fields:
+              - { label: "Activado", name: enabled, widget: boolean, default: false, hint: "Actívalo solo cuando tengas una cuenta en Mailchimp / Buttondown / etc." }
+              - { label: "URL del formulario (action)", name: actionUrl, widget: string, required: false, hint: "URL a la que se envía el email. Ej: https://example.us12.list-manage.com/subscribe/post?u=XXX&id=YYY" }
+              - { label: "Título", name: title, widget: string, default: "Suscríbete" }
+              - { label: "Subtítulo", name: subtitle, widget: text }
+              - { label: "Placeholder del campo correo", name: emailPlaceholder, widget: string, default: "tu@correo.com" }
+              - { label: "Texto del botón", name: submitLabel, widget: string, default: "Suscribirme" }
+              - { label: "Mensaje de éxito", name: successMessage, widget: string, default: "¡Gracias por suscribirte!" }
 
       - name: multimedia
         label: Multimedia

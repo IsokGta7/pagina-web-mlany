@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
 import SocialIcon from '../components/SocialIcon.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
 import settings from '../data/settings.json';
@@ -115,6 +116,8 @@ const hasSocialLinks = social.instagram || social.youtube || social.tiktok;
         </a>
       </div>
     </section>
+
+    <Newsletter />
 
     <!-- Sobre nosotros -->
     <section class="relative bg-gray-100 dark:bg-navy-light overflow-hidden fade-in">
