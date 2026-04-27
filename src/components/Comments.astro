@@ -18,6 +18,22 @@ const bannerEnabled = banner.enabled !== false;
 
     <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname', bannerEnabled }}>
       (function () {
+        function currentTheme() {
+          return document.documentElement.classList.contains('dark') ? 'noborder_dark' : 'noborder_light';
+        }
+
+        function watchThemeChanges() {
+          var observer = new MutationObserver(function () {
+            var frame = document.querySelector('iframe.giscus-frame');
+            if (!frame || !frame.contentWindow) return;
+            frame.contentWindow.postMessage(
+              { giscus: { setConfig: { theme: currentTheme() } } },
+              'https://giscus.app'
+            );
+          });
+          observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        }
+
         var loaded = false;
         function loadGiscusOnce() {
           if (loaded) return;
@@ -40,10 +56,11 @@ const bannerEnabled = banner.enabled !== false;
           s.setAttribute('data-reactions-enabled', '1');
           s.setAttribute('data-emit-metadata', '0');
           s.setAttribute('data-input-position', 'bottom');
-          s.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+          s.setAttribute('data-theme', currentTheme());
           s.setAttribute('data-lang', 'es');
           s.setAttribute('data-loading', 'lazy');
           container.appendChild(s);
+          watchThemeChanges();
         }
 
         function showRejected() {
