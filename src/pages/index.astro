@@ -45,14 +45,14 @@ function renderBold(text: string): string {
 
   <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-navy text-warm-white">
+    <section class="relative overflow-hidden bg-warm-white text-navy dark:bg-navy dark:text-warm-white">
       <Background variant={home.hero.background as any} />
 
       <div class="relative max-w-6xl mx-auto px-4 py-24 sm:py-32 lg:py-40 text-center">
         <h1 class="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
           {home.hero.title}{home.hero.highlight && <> <span class="text-teal">{home.hero.highlight}</span></>}
         </h1>
-        <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
           {home.hero.subtitle}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -68,7 +68,7 @@ function renderBold(text: string): string {
               href={social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-500 text-gray-200 font-semibold hover:border-teal hover:text-teal transition-colors"
+              class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-400 text-gray-700 dark:border-gray-500 dark:text-gray-200 font-semibold hover:border-teal hover:text-teal transition-colors"
             >
               {home.hero.secondaryCta}
             </a>
