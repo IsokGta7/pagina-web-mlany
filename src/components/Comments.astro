@@ -19,7 +19,8 @@ const bannerEnabled = banner.enabled !== false;
     <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname', bannerEnabled }}>
       (function () {
         function currentTheme() {
-          return document.documentElement.classList.contains('dark') ? 'noborder_dark' : 'noborder_light';
+          var mode = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+          return window.location.origin + '/giscus-' + mode + '.css';
         }
 
         function watchThemeChanges() {
