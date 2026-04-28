@@ -80,10 +80,10 @@ export const GET: APIRoute = () => {
   --color-fg-muted: #9E9D9A;
   --color-fg-subtle: #6B6A67;
   --color-fg-on-emphasis: ${navy};
-  --color-canvas-default: ${navy};
+  --color-canvas-default: ${navyLight};
   --color-canvas-overlay: ${navyLight};
-  --color-canvas-inset: #010409;
-  --color-canvas-subtle: ${navyLight};
+  --color-canvas-inset: ${navy};
+  --color-canvas-subtle: ${navy};
   --color-border-default: #333230;
   --color-border-muted: #1F1E1C;
   --color-neutral-muted: rgba(110, 118, 129, 0.4);
@@ -102,6 +102,12 @@ export const GET: APIRoute = () => {
   --color-primer-shadow-inset: 0 0 transparent;
   --color-scale-gray-7: #161b22;
   --color-scale-blue-1: #388bfd;
+}
+
+main {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 1rem !important;
 }
 
 main .pagination-loader-container {

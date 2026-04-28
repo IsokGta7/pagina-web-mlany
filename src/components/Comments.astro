@@ -10,10 +10,12 @@ const bannerEnabled = banner.enabled !== false;
 {enabled && (
   <section class="max-w-3xl mx-auto px-4 pb-16">
     <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">Comentarios</h2>
-    <div id="giscus-container" class="min-h-[200px]">
-      <p id="giscus-placeholder" class="text-sm text-gray-500 dark:text-gray-400 p-4 bg-gray-50 dark:bg-navy-light rounded-xl">
-        Los comentarios se activarán después de aceptar las cookies.
-      </p>
+    <div class="rounded-2xl bg-white dark:bg-navy-light border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div id="giscus-container" class="min-h-[200px]">
+        <p id="giscus-placeholder" class="text-sm text-gray-500 dark:text-gray-400 p-6">
+          Los comentarios se activarán después de aceptar las cookies.
+        </p>
+      </div>
     </div>
 
     <script is:inline define:vars={{ repo: c.repo, repoId: c.repoId, category: c.category || 'General', categoryId: c.categoryId, mapping: c.mapping || 'pathname', bannerEnabled }}>
@@ -100,3 +102,11 @@ const bannerEnabled = banner.enabled !== false;
     </script>
   </section>
 )}
+
+<style>
+  /* Fade-in for the giscus iframe once it loads — avoids the height-jump pop. */
+  iframe.giscus-frame {
+    width: 100% !important;
+    transition: height 0.25s ease;
+  }
+</style>
