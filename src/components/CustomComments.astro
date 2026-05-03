@@ -1,0 +1,176 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  postSlug: string;
+}
+
+const { postSlug } = Astro.props;
+
+const all = await getCollection('comments', ({ data }) =>
+  data.approved === true && data.post_slug === postSlug
+);
+
+const sorted = all.sort(
+  (a, b) => new Date(a.data.created_at).getTime() - new Date(b.data.created_at).getTime()
+);
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('') || '?';
+}
+
+function fmtDate(d: Date | string): string {
+  return new Date(d).toLocaleDateString('es-MX', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<section class="max-w-3xl mx-auto px-4 pb-16">
+  <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-6">
+    Comentarios{sorted.length > 0 && <span class="text-gray-400 dark:text-gray-500 font-normal"> ({sorted.length})</span>}
+  </h2>
+
+  {sorted.length === 0 ? (
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-8 p-4 rounded-xl bg-gray-50 dark:bg-navy-light/50">
+      Sé el primero en comentar este artículo.
+    </p>
+  ) : (
+    <ul class="space-y-4 mb-10">
+      {sorted.map((c) => (
+        <li class="bg-white dark:bg-navy-light rounded-2xl p-5 border border-gray-200 dark:border-gray-700">
+          <div class="flex items-start gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-teal/15 text-teal flex items-center justify-center font-semibold text-sm flex-shrink-0">
+              {initials(c.data.author_name)}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-navy dark:text-warm-white text-sm leading-tight">{c.data.author_name}</p>
+              <time class="text-xs text-gray-500 dark:text-gray-400" datetime={new Date(c.data.created_at).toISOString()}>
+                {fmtDate(c.data.created_at)}
+              </time>
+            </div>
+          </div>
+          <p class="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">{c.data.content}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <form
+    id="comment-form"
+    class="bg-white dark:bg-navy-light rounded-2xl p-6 border border-gray-200 dark:border-gray-700"
+    novalidate
+  >
+    <h3 class="font-serif text-lg font-semibold text-navy dark:text-warm-white mb-1">Deja un comentario</h3>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-5">Tu comentario será publicado tras una revisión rápida.</p>
+
+    <input type="hidden" name="post_slug" value={postSlug} />
+    <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden">
+      <label>No llenar este campo<input type="text" name="hp" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label for="comment-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Tu nombre
+        </label>
+        <input
+          id="comment-name"
+          name="author_name"
+          type="text"
+          required
+          maxlength="60"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-navy text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal text-sm"
+          placeholder="Cómo quieres que te identifiquemos"
+        />
+      </div>
+      <div>
+        <label for="comment-content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Comentario
+        </label>
+        <textarea
+          id="comment-content"
+          name="content"
+          required
+          rows="4"
+          minlength="2"
+          maxlength="5000"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-navy text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal/50 focus:border-teal resize-y text-sm"
+          placeholder="Comparte tu opinión, dudas o aportes..."
+        ></textarea>
+      </div>
+      <button
+        id="comment-submit"
+        type="submit"
+        class="px-5 py-2 rounded-lg bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+      >
+        Enviar comentario
+      </button>
+    </div>
+
+    <p
+      id="comment-success"
+      class="hidden mt-4 p-3 rounded-lg bg-teal/10 text-teal text-sm font-medium"
+      role="status"
+      aria-live="polite"
+    >
+      ¡Gracias! Tu comentario fue enviado y se publicará tras revisión.
+    </p>
+    <p
+      id="comment-error"
+      class="hidden mt-4 p-3 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-medium"
+      role="alert"
+      aria-live="assertive"
+    >
+      No pudimos enviar tu comentario. Por favor, inténtalo de nuevo.
+    </p>
+  </form>
+</section>
+
+<script is:inline>
+  (function () {
+    var form = document.getElementById('comment-form');
+    if (!form) return;
+    var success = document.getElementById('comment-success');
+    var error = document.getElementById('comment-error');
+    var btn = document.getElementById('comment-submit');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      success.classList.add('hidden');
+      error.classList.add('hidden');
+      btn.disabled = true;
+      var originalLabel = btn.textContent;
+      btn.textContent = 'Enviando...';
+
+      try {
+        var fd = new FormData(form);
+        var data = {};
+        fd.forEach(function (v, k) { data[k] = v; });
+        var res = await fetch('/.netlify/functions/submit-comment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          form.reset();
+          success.classList.remove('hidden');
+        } else {
+          error.classList.remove('hidden');
+        }
+      } catch {
+        error.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+      }
+    });
+  })();
+</script>

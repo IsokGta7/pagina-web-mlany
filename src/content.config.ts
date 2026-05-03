@@ -52,4 +52,15 @@ const legal = defineCollection({
   }),
 });
 
-export const collections = { articulos, equipo, legal };
+const comments = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/comments' }),
+  schema: z.object({
+    post_slug: z.string(),
+    author_name: z.string(),
+    content: z.string(),
+    approved: z.boolean(),
+    created_at: z.coerce.date(),
+  }),
+});
+
+export const collections = { articulos, equipo, legal, comments };
