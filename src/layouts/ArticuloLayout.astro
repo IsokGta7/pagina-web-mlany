@@ -3,7 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
-import Comments from '../components/Comments.astro';
+import CustomComments from '../components/CustomComments.astro';
 import Img from '../components/Img.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadTime } from '../utils/readTime';
@@ -228,7 +228,7 @@ const structuredData = {
       </div>
     </article>
 
-    <Comments />
+    {settings.comments?.enabled !== false && <CustomComments postSlug={slug} />}
 
     <!-- Artículos relacionados -->
     {related.length > 0 && (
