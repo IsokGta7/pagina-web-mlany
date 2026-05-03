@@ -1,0 +1,10 @@
+{
+  "post_slug": "articulo-de-prueba",
+  "author_name": "No soy isok",
+  "content": "Comentario de prueba con insultos \"pendejo\"",
+  "approved": false,
+  "created_at": "2026-05-03T19:48:55.628Z",
+  "flags": [
+    "ai-moderation-unavailable"
+  ]
+}
