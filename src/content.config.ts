@@ -60,6 +60,7 @@ const comments = defineCollection({
     content: z.string(),
     approved: z.boolean(),
     created_at: z.coerce.date(),
+    flags: z.array(z.string()).optional().default([]),
   }),
 });
 

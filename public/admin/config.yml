@@ -112,6 +112,12 @@ collections:
       - { label: "Contenido", name: content, widget: text }
       - { label: "Aprobado (visible en el sitio)", name: approved, widget: boolean, default: false, hint: "Marca para publicar el comentario en el sitio" }
       - { label: "Fecha de envío", name: created_at, widget: datetime, format: "YYYY-MM-DDTHH:mm:ss.SSSZ" }
+      - label: "Marcas de moderación automática"
+        name: flags
+        widget: list
+        required: false
+        default: []
+        hint: "Razones por las que la moderación automática lo marcó. Se llenan al recibir el comentario; sirven solo de referencia para revisar."
 
   - name: legal
     label: Páginas legales
