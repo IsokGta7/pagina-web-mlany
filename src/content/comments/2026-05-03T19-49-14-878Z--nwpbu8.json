@@ -1,0 +1,10 @@
+{
+  "post_slug": "articulo-de-prueba",
+  "author_name": "Comentario 2",
+  "content": "Comentario normal",
+  "approved": false,
+  "created_at": "2026-05-03T19:49:14.878Z",
+  "flags": [
+    "ai-moderation-unavailable"
+  ]
+}
