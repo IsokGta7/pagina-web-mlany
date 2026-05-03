@@ -121,4 +121,18 @@ El sitio está optimizado para despliegue en **Netlify**:
 
 ## Licencia
 
-Proyecto desarrollado por Isaac Rodríguez.
+Copyright © 2026 **Isaac Rodríguez** ([@IsokGta7](https://github.com/IsokGta7)).
+
+Este proyecto se distribuye bajo la **[PolyForm Noncommercial License 1.0.0](LICENSE)**. En términos prácticos:
+
+- ✅ **Uso permitido sin pedir autorización**: estudio, experimentación, proyectos personales, blogs sin fines de lucro, fines educativos, organizaciones sin fines de lucro y cualquier otro propósito **no comercial**.
+- ✅ **Modificación y redistribución no comercial**: puedes hacer un fork, modificar el código y compartirlo, siempre que mantengas este aviso de copyright y la misma licencia.
+- ❌ **Uso comercial sin autorización**: no se permite vender el código, ofrecerlo como producto, integrarlo en un servicio comercial, ni revenderlo (con o sin modificaciones).
+
+### ¿Quieres usarlo comercialmente?
+
+Necesitas una **licencia comercial** separada. Para solicitarla, abre un issue en este repositorio o contacta a Isaac Rodríguez a través de su perfil de GitHub.
+
+### Alcance
+
+La licencia cubre el **código fuente** del sitio. El **contenido editorial** publicado en el sitio desplegado (artículos, biografías, comentarios, imágenes subidas) pertenece a sus respectivos autores y se rige por los *Términos de servicio* del sitio.

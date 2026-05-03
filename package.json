@@ -1,7 +1,11 @@
 {
   "name": "pagina-web-mlany",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "Isaac Rodríguez (https://github.com/IsokGta7)",
+  "homepage": "https://github.com/IsokGta7/pagina-web-mlany",
+  "private": true,
   "engines": {
     "node": ">=22.12.0"
   },
