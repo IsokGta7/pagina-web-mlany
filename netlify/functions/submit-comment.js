@@ -1,13 +1,17 @@
 import { findProfanity, findHardBlock } from './_profanity.js';
+import {
+  checkAndRecordRateLimit,
+  hashContent,
+  getCachedModeration,
+  setCachedModeration,
+  stageComment,
+} from './_blobs.js';
 
 const MAX_NAME = 60;
 const MIN_CONTENT = 2;
 const MAX_CONTENT = 5000;
 const MAX_LINKS = 2;
 const MIN_TEXT_RATIO = 0.5;
-
-const REPO = 'IsokGta7/pagina-web-mlany';
-const BRANCH = 'master';
 
 // Hard reject: commercial spam patterns. Keep tight to avoid false positives.
 const SPAM_BLOCKLIST_RX = [
@@ -174,6 +178,14 @@ async function tier2(text) {
   return { configured: false };
 }
 
+function getClientIp(req) {
+  const xff = req.headers.get('x-forwarded-for');
+  if (xff) return xff.split(',')[0].trim();
+  const xrl = req.headers.get('x-nf-client-connection-ip');
+  if (xrl) return xrl.trim();
+  return 'unknown';
+}
+
 export default async (req) => {
   if (req.method !== 'POST') return bad(405, 'Method not allowed');
 
@@ -188,6 +200,22 @@ export default async (req) => {
 
   if (hp) return new Response(JSON.stringify({ success: true }), { status: 200 });
 
+  // Rate limit by client IP — cheap reject before any heavy work.
+  const ip = getClientIp(req);
+  const rl = await checkAndRecordRateLimit(ip);
+  if (rl.exceeded) {
+    return new Response(
+      JSON.stringify({ error: 'Has enviado demasiados comentarios. Intenta más tarde.' }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'Retry-After': String(rl.retryAfterSec || 300),
+        },
+      }
+    );
+  }
+
   if (typeof post_slug !== 'string' || !/^[a-z0-9-]+$/i.test(post_slug)) return bad(400, 'Invalid post slug');
   if (typeof author_name !== 'string' || typeof content !== 'string') return bad(400, 'Missing fields');
 
@@ -200,8 +228,21 @@ export default async (req) => {
   let flags = t1.flags;
   let approved = flags.length === 0;
 
-  const t2 = await tier2(`${cleanName}\n${cleanContent}`);
-  if (t2.configured !== false) {
+  // Moderation cache: skip the AI call when we've moderated this exact text before.
+  const modKey = await hashContent(`${cleanName}\n${cleanContent}`);
+  let t2 = await getCachedModeration(modKey);
+  let cacheHit = !!t2;
+
+  if (!cacheHit) {
+    t2 = await tier2(`${cleanName}\n${cleanContent}`);
+    // Only cache results from a successful AI call. Don't memoise transient
+    // failures (skip:true) or "Tier 2 not configured" — those should retry.
+    if (t2 && t2.configured !== false && !t2.skip) {
+      await setCachedModeration(modKey, t2);
+    }
+  }
+
+  if (t2 && t2.configured !== false) {
     if (t2.skip) {
       flags = flags.concat(['ai-moderation-unavailable']);
       approved = false;
@@ -211,47 +252,24 @@ export default async (req) => {
     }
   }
 
-  const token = process.env.COMMENT_GH_TOKEN;
-  if (!token) {
-    console.error('COMMENT_GH_TOKEN env var not set');
-    return bad(500, 'Server misconfigured');
-  }
-
-  const now = new Date();
-  const tsKey = now.toISOString().replace(/[:.]/g, '-');
-  const random = Math.random().toString(36).slice(2, 8);
-  const filename = `${tsKey}--${random}.json`;
-  const path = `src/content/comments/${filename}`;
+  if (cacheHit) flags.push('cached-moderation');
 
   const payload = {
     post_slug,
     author_name: cleanName,
     content: cleanContent,
     approved,
-    created_at: now.toISOString(),
+    created_at: new Date().toISOString(),
     flags,
   };
 
-  const fileContent = Buffer.from(JSON.stringify(payload, null, 2) + '\n', 'utf8').toString('base64');
-
-  const ghRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      'User-Agent': 'ciensite-comments',
-    },
-    body: JSON.stringify({
-      message: `comment: ${cleanName} on ${post_slug}${approved ? ' (auto-approved)' : ''}`,
-      content: fileContent,
-      branch: BRANCH,
-    }),
-  });
-
-  if (!ghRes.ok) {
-    const errText = await ghRes.text();
-    console.error('GitHub API error:', ghRes.status, errText);
+  // Stage in Blobs. The scheduled batch-commit-comments function will sweep
+  // staged comments into a single git commit every 5 minutes, so individual
+  // submissions don't trigger Netlify rebuilds.
+  try {
+    await stageComment(payload);
+  } catch (e) {
+    console.error('Blob staging failed:', e);
     return bad(502, 'Failed to save comment');
   }
 
