@@ -7,9 +7,17 @@ import Img from '../components/Img.astro';
 import multimedia from '../data/multimedia.json';
 import misc from '../data/content/misc.json';
 
-const videos = multimedia.videos || [];
-const photos = multimedia.gallery || [];
-const instagramPosts = multimedia.instagramPosts || [];
+// Explicit types: when the CMS hasn't added any items yet, the JSON arrays
+// resolve to `never[]` which fails downstream property access. Lock the
+// shape here so editors can add items via the CMS without TypeScript
+// rejecting the existing JSX.
+type Video = { id: string; title: string };
+type Photo = { src: string; alt: string };
+type InstagramPost = { url: string };
+
+const videos: Video[] = multimedia.videos || [];
+const photos: Photo[] = multimedia.gallery || [];
+const instagramPosts: InstagramPost[] = multimedia.instagramPosts || [];
 const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.length > 0;
 const t = misc.multimedia;
 ---
