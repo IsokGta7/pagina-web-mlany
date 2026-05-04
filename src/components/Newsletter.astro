@@ -15,7 +15,7 @@ const successMessage = nl.successMessage || '¡Gracias por suscribirte!';
     <div class="bg-gray-100 dark:bg-navy-light rounded-2xl p-8 text-center">
       <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-2">{title}</h2>
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">{subtitle}</p>
-      <form class="newsletter-form flex flex-col sm:flex-row gap-3 max-w-md mx-auto" action={nl.actionUrl} method="POST" target="_blank" rel="noopener">
+      <form class="newsletter-form flex flex-col sm:flex-row gap-3 max-w-md mx-auto" action={nl.actionUrl} method="post" target="_blank">
         <label class="sr-only" for="newsletter-email">Correo electrónico</label>
         <input
           id="newsletter-email"

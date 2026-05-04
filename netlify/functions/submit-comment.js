@@ -1,4 +1,4 @@
-import { findProfanity, findHardBlock } from './_profanity.js';
+import { tier1, sanitize, MAX_NAME, POST_SLUG_RX } from './_validation.js';
 import {
   checkAndRecordRateLimit,
   hashContent,
@@ -6,25 +6,6 @@ import {
   setCachedModeration,
   stageComment,
 } from './_blobs.js';
-
-const MAX_NAME = 60;
-const MIN_CONTENT = 2;
-const MAX_CONTENT = 5000;
-const MAX_LINKS = 2;
-const MIN_TEXT_RATIO = 0.5;
-
-// Hard reject: commercial spam patterns. Keep tight to avoid false positives.
-const SPAM_BLOCKLIST_RX = [
-  /\b(viagra|cialis|tadalafil|sildenafil)\b/i,
-  /\b(casino|poker|bet365|betway)\b/i,
-  /\b(crypto.{0,5}invest|forex.{0,5}trad|bitcoin.{0,5}profit)\b/i,
-  /\b(buy now|click here|earn .{0,5}\$|make money fast)\b/i,
-  /\b(free .{0,5}(iphone|gift card)|won .{0,5}prize)\b/i,
-];
-
-const URL_RX = /https?:\/\/[^\s]+|www\.[^\s]+|\b[a-z0-9-]+\.(com|net|org|io|app|me|co|ru|cn|tk|ml)\/?[^\s]*/gi;
-const REPEATED_CHAR_RX = /(.)\1{6,}/;
-const ALL_CAPS_RX = /^[^a-zà-ÿ]{20,}$/;
 
 const PERSPECTIVE_THRESHOLDS = {
   TOXICITY: 0.7,
@@ -40,54 +21,6 @@ function bad(status, error) {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
-}
-
-function sanitize(s) {
-  return String(s).replace(/<[^>]*>/g, '').trim();
-}
-
-function tier1(content, name) {
-  const flags = [];
-  const combined = `${name} ${content}`;
-
-  if (name.length === 0) return { reject: 'Author name required' };
-  if (name.length > MAX_NAME) return { reject: 'Author name too long' };
-  if (content.length < MIN_CONTENT) return { reject: 'Comment too short' };
-  if (content.length > MAX_CONTENT) return { reject: 'Comment too long' };
-
-  for (const rx of SPAM_BLOCKLIST_RX) {
-    if (rx.test(content) || rx.test(name)) {
-      return { reject: 'Content rejected by spam filter' };
-    }
-  }
-
-  const slur = findHardBlock(combined);
-  if (slur) return { reject: 'Content rejected by language filter' };
-
-  if (REPEATED_CHAR_RX.test(content)) {
-    return { reject: 'Spam-like repeated characters' };
-  }
-
-  if (ALL_CAPS_RX.test(content) && content.length > 30) {
-    flags.push('all-caps');
-  }
-
-  const urls = content.match(URL_RX) || [];
-  if (urls.length > MAX_LINKS) {
-    return { reject: 'Too many links' };
-  }
-  if (urls.length > 0) flags.push(`contains-${urls.length}-link${urls.length > 1 ? 's' : ''}`);
-
-  if (content.length > 20) {
-    const letters = (content.match(/\p{L}/gu) || []).length;
-    const ratio = letters / content.length;
-    if (ratio < MIN_TEXT_RATIO) flags.push('low-letter-ratio');
-  }
-
-  const profanityHits = findProfanity(combined);
-  for (const word of profanityHits) flags.push(`profanity:${word}`);
-
-  return { ok: true, flags };
 }
 
 async function checkPerspective(text, apiKey) {
@@ -216,7 +149,7 @@ export default async (req) => {
     );
   }
 
-  if (typeof post_slug !== 'string' || !/^[a-z0-9-]+$/i.test(post_slug)) return bad(400, 'Invalid post slug');
+  if (typeof post_slug !== 'string' || !POST_SLUG_RX.test(post_slug)) return bad(400, 'Invalid post slug');
   if (typeof author_name !== 'string' || typeof content !== 'string') return bad(400, 'Missing fields');
 
   const cleanName = sanitize(author_name).slice(0, MAX_NAME);
