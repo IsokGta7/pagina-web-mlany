@@ -1,26 +1,26 @@
 {
   "hero": {
-    "title": "Ciencia para",
-    "highlight": "todos",
-    "subtitle": "Somos un grupo de estudiantes mexicanos apasionados por la divulgación científica. Hacemos la ciencia accesible, interesante y en español.",
-    "primaryCta": "Ver artículos",
-    "secondaryCta": "Seguirnos en Instagram",
-    "background": "atomic"
+    "title": "Ciencia que",
+    "highlight": "conecta",
+    "subtitle": "CienSite es un colectivo independiente integrado por personas interesadas en la divulgación científica y la comunicación de la ciencia desde un enfoque accesible, cercano y comunitario, acercando el conocimiento a la vida cotidiana a través de experiencias, actividades y contenidos que fomentan la curiosidad y el pensamiento crítico.",
+    "primaryCta": "Ver publicaciones",
+    "secondaryCta": "Siguenos en Instagram",
+    "background": "minimal"
   },
   "latest": {
     "heading": "Últimas publicaciones",
-    "subtitle": "Explora nuestros artículos más recientes sobre ciencia, tecnología y medio ambiente.",
+    "subtitle": "Explora nuestras publicaciones más recientes sobre ciencia, curiosidades y divulgación.",
     "viewAllLabel": "Ver todos los artículos"
   },
   "about": {
     "heading": "Sobre nosotros",
-    "paragraph1": "**Ciensite** nació de la convicción de que la ciencia debe ser un derecho, no un privilegio. Somos estudiantes de diversas universidades mexicanas que compartimos una misión: traducir el conocimiento científico a un lenguaje que todos puedan entender y disfrutar.",
-    "paragraph2": "Desde biología molecular hasta astrofísica, pasando por tecnología y medio ambiente, cubrimos los temas que están transformando nuestro mundo. Porque entender la ciencia es entender nuestro futuro.",
+    "paragraph1": "**Ciensite** busca funcionar como una plataforma de divulgación, que no solo comparte eventos científicos, sino que también impulsa la creación de espacios donde la ciencia se comparte con la comunidad.",
+    "paragraph2": "A través de actividades al aire libre, dinámicas culturales y formatos accesibles, el colectivo pretende promover la participación del público y fomentar el interés por la ciencia fuera de los espacios académicos tradicionales.",
     "ctaLabel": "Conoce al equipo",
-    "background": "molecular"
+    "background": "atomic"
   },
   "followUs": {
-    "heading": "Síguenos",
+    "heading": "Síguenos en nuestras redes sociales",
     "subtitle": "Encuentra contenido científico en todas nuestras plataformas."
   }
 }
