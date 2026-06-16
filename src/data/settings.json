@@ -3,18 +3,18 @@
   "analytics": {
     "ga4Id": ""
   },
-  "logo": "",
+  "logo": "/uploads/logo2.jpeg",
   "social": {
-    "instagram": "",
-    "youtube": "",
-    "tiktok": ""
+    "instagram": "https://www.instagram.com/ciensite.mx?igsh=OXhseDQzNTNreW1i",
+    "youtube": "https://youtube.com/@ciensite?si=jjvH7tcyZ9f59cgn",
+    "tiktok": "https://www.tiktok.com/@ciensite.mx?_r=1&_t=ZS-97Gh9QRVW9l"
   },
   "colors": {
-    "primary": "#724c67",
-    "primaryDark": "#b4d06e",
+    "primary": "#0D2B45",
+    "primaryDark": "#2E7D63",
     "darkBg": "#000000",
-    "darkBgLight": "#304260",
-    "lightBg": "#ff6467"
+    "darkBgLight": "#F8E1C4",
+    "lightBg": "#F8E1C4"
   },
   "cookieBanner": {
     "enabled": true,
@@ -24,7 +24,7 @@
     "rejectLabel": "Rechazar",
     "privacyLinkLabel": "Política de privacidad"
   },
-  "siteName": "Ciensite",
+  "siteName": "CienSite",
   "comments": {
     "enabled": true,
     "repo": "IsokGta7/pagina-web-mlany",
@@ -34,7 +34,7 @@
     "mapping": "pathname"
   },
   "newsletter": {
-    "enabled": true,
+    "enabled": false,
     "actionUrl": "",
     "title": "Suscríbete",
     "subtitle": "Recibe nuestros artículos directamente en tu correo.",
