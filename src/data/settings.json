@@ -11,9 +11,9 @@
   },
   "colors": {
     "primary": "#DB1B60",
-    "primaryDark": "#F8E1C4",
+    "primaryDark": "#2E7D62",
     "darkBg": "#0D2B45",
-    "darkBgLight": "#2E7D62",
+    "darkBgLight": "#F8E1C4",
     "lightBg": "#FFFFFF"
   },
   "cookieBanner": {
