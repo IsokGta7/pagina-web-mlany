@@ -1,9 +1,16 @@
 {
   "items": [
-    { "name": "Biología" },
-    { "name": "Física" },
-    { "name": "Química" },
-    { "name": "Tecnología" },
-    { "name": "Medio Ambiente" }
+    {
+      "name": "Publicaciones"
+    },
+    {
+      "name": "Lo que no se ve"
+    },
+    {
+      "name": "Entrevistas"
+    },
+    {
+      "name": "Eventos"
+    }
   ]
 }
