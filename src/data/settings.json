@@ -11,10 +11,10 @@
   },
   "colors": {
     "primary": "#DB1B60",
-    "primaryDark": "#2E7D63",
+    "primaryDark": "#F8E1C4",
     "darkBg": "#0D2B45",
     "darkBgLight": "#2E7D62",
-    "lightBg": "#F8E1C4"
+    "lightBg": "#FFFFFF"
   },
   "cookieBanner": {
     "enabled": true,
