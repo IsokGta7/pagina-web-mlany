@@ -13,7 +13,7 @@
     "primary": "#2E7D62",
     "primaryDark": "#DB1B60",
     "darkBg": "#0D2B45",
-    "darkBgLight": "#F8E1C4",
+    "darkBgLight": "#DB1B60",
     "lightBg": "#FFFFFF"
   },
   "cookieBanner": {
