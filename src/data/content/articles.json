@@ -4,11 +4,11 @@
     "subtitle": "Ciencia explicada de forma clara y accesible. Filtra por categoría o busca un tema específico.",
     "allCategoriesLabel": "Todos",
     "searchPlaceholder": "Buscar publicaciones...",
-    "noResults": "No se encontraron artículos en esta categoría.",
+    "noResults": "No se encontraron publicaciones en esta categoría.",
     "noSearchResults": "No se encontraron resultados."
   },
   "article": {
-    "readTimeLabel": "min de lectura",
+    "readTimeLabel": "min",
     "byLabel": "Por",
     "shareHeading": "Compartir esta publicación",
     "copyLinkLabel": "Copiar enlace",
