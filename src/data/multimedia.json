@@ -1,5 +1,10 @@
 {
   "videos": [],
-  "gallery": [],
+  "gallery": [
+    {
+      "src": "/uploads/724061125_122136028929160127_1867285332399429775_n.jpg",
+      "alt": "¿Cómo llega el conocimiento académico a más personas? 👀 La difusión cultural juega un papel clave en este proceso. Conoce qué es, cómo se realiza en @colsonora y cuál es su impacto en la construcción de una sociedad más informada. 📚💬"
+    }
+  ],
   "instagramPosts": []
 }
