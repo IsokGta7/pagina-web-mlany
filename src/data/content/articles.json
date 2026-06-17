@@ -1,18 +1,18 @@
 {
   "list": {
-    "heading": "Artículos",
+    "heading": "Publicaciones",
     "subtitle": "Ciencia explicada de forma clara y accesible. Filtra por categoría o busca un tema específico.",
     "allCategoriesLabel": "Todos",
-    "searchPlaceholder": "Buscar artículos...",
+    "searchPlaceholder": "Buscar publicaciones...",
     "noResults": "No se encontraron artículos en esta categoría.",
     "noSearchResults": "No se encontraron resultados."
   },
   "article": {
     "readTimeLabel": "min de lectura",
     "byLabel": "Por",
-    "shareHeading": "Compartir este artículo",
+    "shareHeading": "Compartir esta publicación",
     "copyLinkLabel": "Copiar enlace",
     "copiedLabel": "¡Copiado!",
-    "relatedHeading": "Artículos relacionados"
+    "relatedHeading": "Publicaciones relacionadas"
   }
 }
