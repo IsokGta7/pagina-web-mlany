@@ -10,10 +10,10 @@
     "tiktok": "https://www.tiktok.com/@ciensite.mx?_r=1&_t=ZS-97Gh9QRVW9l"
   },
   "colors": {
-    "primary": "#2E7D62",
-    "primaryDark": "#DB1B60",
+    "primary": "#DB1B60",
+    "primaryDark": "#FFFF",
     "darkBg": "#0D2B45",
-    "darkBgLight": "#DB1B60",
+    "darkBgLight": "#2E7D62",
     "lightBg": "#FFFFFF"
   },
   "cookieBanner": {
