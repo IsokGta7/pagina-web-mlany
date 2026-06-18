@@ -7,6 +7,6 @@ bio: |-
 photo: https://picsum.photos/seed/anasofia/400/400
 order: 4
 socialLinks:
-  instagram: https://instagram.com/
+  instagram: https://www.instagram.com/ari_eor?igsh=MWdrMngxbGxqMWd2ag==
   linkedin: ""
 ---
