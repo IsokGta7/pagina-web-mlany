@@ -13,7 +13,7 @@
     "primary": "#DB1B60",
     "primaryDark": "#2E7D62",
     "darkBg": "#0D2B45",
-    "darkBgLight": "#000",
+    "darkBgLight": "#2E7D62",
     "lightBg": "#FFFFFF"
   },
   "cookieBanner": {
@@ -26,7 +26,7 @@
   },
   "siteName": "CienSite",
   "comments": {
-    "enabled": true,
+    "enabled": false,
     "repo": "IsokGta7/pagina-web-mlany",
     "repoId": "R_kgDORv_-Xw",
     "category": "General",
