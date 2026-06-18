@@ -1,6 +1,6 @@
 ---
 name: Arianna Orozco
-role: "Coordinadora "
+role: Coordinadora
 bio: |-
   Enfermera y estudiante de Cs. de la Comunicación.
   Pasión por toda expresión de arte y conocimiento.
