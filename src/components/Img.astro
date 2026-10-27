@@ -1,4 +1,8 @@
 ---
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { imageMetadata } from 'astro/assets/utils';
+
 interface Props {
   src: string;
   alt: string;
@@ -43,6 +47,21 @@ const srcset = useOptimization
   : undefined;
 
 const finalSrc = useOptimization ? cdn(src, 1200) : src;
+
+// Files under public/ (CMS uploads) have dimensions we can read at build time. Passing them lets
+// the browser reserve the image's space before it loads; the CSS classes still decide the size.
+async function localDimensions(url: string): Promise<{ width?: number; height?: number }> {
+  if (isExternal || !url.startsWith('/')) return {};
+  try {
+    const file = path.join(process.cwd(), 'public', decodeURI(url.split(/[?#]/)[0]));
+    const { width, height } = await imageMetadata(await readFile(file), url);
+    return { width, height };
+  } catch {
+    return {};
+  }
+}
+
+const dimensions = width === undefined && height === undefined ? await localDimensions(src) : { width, height };
 ---
 
 <img
@@ -50,8 +69,8 @@ const finalSrc = useOptimization ? cdn(src, 1200) : src;
   srcset={srcset}
   sizes={srcset ? sizes : undefined}
   alt={alt}
-  width={width}
-  height={height}
+  width={dimensions.width}
+  height={dimensions.height}
   class={className}
   loading={priority ? 'eager' : loading}
   decoding={priority ? 'sync' : 'async'}
