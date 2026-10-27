@@ -111,6 +111,43 @@ async function tier2(text) {
   return { configured: false };
 }
 
+// Upper bound on the request body. The largest valid submission (a
+// 5000-character comment plus name and slug) stays under it even if every
+// character is sent as a six-byte JSON unicode escape.
+export const MAX_BODY_BYTES = 32 * 1024;
+
+// Reads and parses the JSON body without ever holding more than maxBytes of
+// it. A declared Content-Length over the limit is refused without reading;
+// otherwise the stream is read only until it passes the limit, which also
+// covers chunked bodies that declare no length.
+export async function readJsonBody(req, maxBytes = MAX_BODY_BYTES) {
+  const declared = Number(req.headers.get('content-length'));
+  if (Number.isFinite(declared) && declared > maxBytes) return { status: 413 };
+  if (!req.body) return { status: 400 };
+
+  const reader = req.body.getReader();
+  const decoder = new TextDecoder();
+  let size = 0;
+  let text = '';
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > maxBytes) {
+      await reader.cancel();
+      return { status: 413 };
+    }
+    text += decoder.decode(value, { stream: true });
+  }
+  text += decoder.decode();
+
+  try {
+    return { data: JSON.parse(text) };
+  } catch {
+    return { status: 400 };
+  }
+}
+
 // A comment is auto-approved only when Tier 1 raised nothing and Tier 2
 // actually checked it and found nothing. If Tier 2 is not configured, or its
 // call failed, nobody has vetted the text, so it waits for a moderator.
@@ -141,12 +178,10 @@ export function getClientIp(req, context) {
 export default async (req, context) => {
   if (req.method !== 'POST') return bad(405, 'Method not allowed');
 
-  let data;
-  try {
-    data = await req.json();
-  } catch {
-    return bad(400, 'Invalid JSON');
-  }
+  const body = await readJsonBody(req);
+  if (body.status === 413) return bad(413, 'Request too large');
+  if (body.status) return bad(400, 'Invalid JSON');
+  const data = body.data;
 
   const { post_slug, author_name, content, hp } = data || {};
 
