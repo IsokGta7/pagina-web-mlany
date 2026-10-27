@@ -23,6 +23,23 @@ function bad(status, error) {
   });
 }
 
+// Turns a Perspective attributeScores object into a tier-2 verdict. A response
+// that lacks a numeric score for any requested attribute is treated as
+// unavailable (skip), not as clean: a partial answer must send the comment to
+// review rather than approve it.
+export function evaluatePerspectiveScores(scores) {
+  if (!scores || typeof scores !== 'object') return { skip: true };
+  const flags = [];
+  for (const [attr, threshold] of Object.entries(PERSPECTIVE_THRESHOLDS)) {
+    const score = scores[attr]?.summaryScore?.value;
+    if (typeof score !== 'number' || Number.isNaN(score)) return { skip: true };
+    if (score >= threshold) {
+      flags.push(`perspective:${attr.toLowerCase()}:${score.toFixed(2)}`);
+    }
+  }
+  return { flagged: flags.length > 0, flags };
+}
+
 async function checkPerspective(text, apiKey) {
   try {
     const ctrl = new AbortController();
@@ -50,17 +67,7 @@ async function checkPerspective(text, apiKey) {
     }
 
     const data = await res.json();
-    const scores = data.attributeScores;
-    if (!scores) return { skip: true };
-
-    const flags = [];
-    for (const [attr, threshold] of Object.entries(PERSPECTIVE_THRESHOLDS)) {
-      const score = scores[attr]?.summaryScore?.value;
-      if (typeof score === 'number' && score >= threshold) {
-        flags.push(`perspective:${attr.toLowerCase()}:${score.toFixed(2)}`);
-      }
-    }
-    return { flagged: flags.length > 0, flags };
+    return evaluatePerspectiveScores(data.attributeScores);
   } catch (e) {
     console.warn('Perspective error:', e);
     return { skip: true };
