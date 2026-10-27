@@ -69,6 +69,7 @@ collections:
     create: true
     extension: md
     format: frontmatter
+    identifier_field: name
     slug: "{{slug}}"
     fields:
       - { label: "Nombre", name: name, widget: string }
