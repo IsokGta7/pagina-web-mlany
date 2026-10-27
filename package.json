@@ -26,12 +26,12 @@
     "@netlify/blobs": "^9.1.6",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.0.8",
+    "astro": "^6.4.8",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.12"
   }
 }
