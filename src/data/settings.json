@@ -26,12 +26,7 @@
   },
   "siteName": "CienSite",
   "comments": {
-    "enabled": false,
-    "repo": "IsokGta7/pagina-web-mlany",
-    "repoId": "R_kgDORv_-Xw",
-    "category": "General",
-    "categoryId": "DIC_kwDORv_-X84C71bj",
-    "mapping": "pathname"
+    "enabled": false
   },
   "newsletter": {
     "enabled": false,

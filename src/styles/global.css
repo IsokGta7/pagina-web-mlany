@@ -110,7 +110,7 @@ html.dark .prose a {
 
 /* Estilos para impresión */
 @media print {
-  header, footer, nav, #reading-progress, #toc, #cookie-banner, #giscus-container,
+  header, footer, nav, #reading-progress, #toc, #cookie-banner,
   .lightbox-trigger, [id^="form-success"], [id^="form-error"] {
     display: none !important;
   }

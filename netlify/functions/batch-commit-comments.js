@@ -7,6 +7,7 @@
 // Contents API so all files land in a single commit atomically.
 
 import { listStagedComments, deleteStagedComment } from './_blobs.js';
+import settings from '../../src/data/settings.json' with { type: 'json' };
 
 const REPO = 'IsokGta7/pagina-web-mlany';
 const BRANCH = 'master';
@@ -46,6 +47,13 @@ async function gh(token, path, options = {}) {
 }
 
 export default async () => {
+  // Same switch the article layout uses to hide the comment form. The setting is read at deploy
+  // time, so turning comments back on in the CMS resumes the sweep with the next deploy.
+  if (settings.comments?.enabled === false) {
+    console.log('Comments are disabled in settings; skipping the batch');
+    return new Response('Comments disabled', { status: 200 });
+  }
+
   const token = process.env.COMMENT_GH_TOKEN;
   if (!token) {
     console.error('COMMENT_GH_TOKEN env var not set');

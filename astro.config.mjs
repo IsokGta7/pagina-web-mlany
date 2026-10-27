@@ -6,8 +6,10 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://ciensite.netlify.app',
-  // Astro 7 defaults to 'jsx', which strips whitespace between inline elements.
-  // Keep the Astro 6 behaviour so text that relies on that whitespace still renders spaced.
+  // true is the Astro 6 default: it collapses the whitespace between tags but keeps the spaces
+  // that change how text renders. Astro 7's default, 'jsx', applies JSX whitespace rules and drops
+  // whitespace and line breaks around elements, which glued inline text to its neighbours
+  // in this site's templates.
   compressHTML: true,
   vite: {
     plugins: [tailwindcss()],
