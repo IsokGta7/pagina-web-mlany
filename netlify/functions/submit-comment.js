@@ -111,15 +111,18 @@ async function tier2(text) {
   return { configured: false };
 }
 
-function getClientIp(req) {
-  const xff = req.headers.get('x-forwarded-for');
-  if (xff) return xff.split(',')[0].trim();
-  const xrl = req.headers.get('x-nf-client-connection-ip');
-  if (xrl) return xrl.trim();
+// Only sources Netlify itself sets are trusted here. `x-forwarded-for` is
+// deliberately ignored: a sender can prefix it with any address and Netlify
+// keeps that prefix, which would let them pick their own rate-limit bucket.
+export function getClientIp(req, context) {
+  const ctxIp = typeof context?.ip === 'string' ? context.ip.trim() : '';
+  if (ctxIp) return ctxIp;
+  const nfIp = req.headers.get('x-nf-client-connection-ip');
+  if (nfIp && nfIp.trim()) return nfIp.trim();
   return 'unknown';
 }
 
-export default async (req) => {
+export default async (req, context) => {
   if (req.method !== 'POST') return bad(405, 'Method not allowed');
 
   let data;
@@ -134,7 +137,7 @@ export default async (req) => {
   if (hp) return new Response(JSON.stringify({ success: true }), { status: 200 });
 
   // Rate limit by client IP — cheap reject before any heavy work.
-  const ip = getClientIp(req);
+  const ip = getClientIp(req, context);
   const rl = await checkAndRecordRateLimit(ip);
   if (rl.exceeded) {
     return new Response(
