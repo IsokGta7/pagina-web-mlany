@@ -78,12 +78,20 @@ check "/sitemap-index.xml" "sitemapindex|<sitemap" "Sitemap index is generated"
 echo
 echo "=== Per-article rendering ==="
 # Iterate over actual article files so the test scales as articles are added.
+# The layout only renders the comments form while settings.comments.enabled is
+# not false (src/layouts/ArticuloLayout.astro), so the check follows the same
+# switch: present when enabled, absent when the site deliberately hides it.
+comments_enabled=$(node -e 'const s = require("./src/data/settings.json"); process.stdout.write(String(s.comments?.enabled !== false))')
 shopt -s nullglob
 for f in src/content/articulos/*.mdx; do
   slug=$(basename "$f" .mdx)
   url="/articulos/${slug}/"
   check "$url" "<article" "Article '$slug' renders"
-  check "$url" "id=\"comment-form\"|comment-form" "Article '$slug' has the comments form"
+  if [[ "$comments_enabled" == "true" ]]; then
+    check "$url" "id=\"comment-form\"|comment-form" "Article '$slug' has the comments form"
+  else
+    check_absent "$url" "id=\"comment-form\"" "Article '$slug' hides the comments form (comments disabled)"
+  fi
 done
 
 echo
