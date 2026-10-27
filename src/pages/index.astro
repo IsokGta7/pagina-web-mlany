@@ -1,7 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import ArticuloCard from '../components/ArticuloCard.astro';
 import SocialIcon from '../components/SocialIcon.astro';
 import Background from '../components/Background.astro';
@@ -41,127 +39,121 @@ function renderBold(text: string): string {
 ---
 
 <BaseLayout title="Inicio" description="Ciensite — Divulgación científica por estudiantes mexicanos. Ciencia accesible, en español y para todos.">
-  <Header />
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-warm-white text-navy dark:bg-navy dark:text-warm-white">
+    <Background variant={home.hero.background as any} />
 
-  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
-    <!-- Hero -->
-    <section class="relative overflow-hidden bg-warm-white text-navy dark:bg-navy dark:text-warm-white">
-      <Background variant={home.hero.background as any} />
-
-      <div class="relative max-w-6xl mx-auto px-4 py-24 sm:py-32 lg:py-40 text-center">
-        <h1 class="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-          {home.hero.title}{home.hero.highlight && <> <span class="text-teal">{home.hero.highlight}</span></>}
-        </h1>
-        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-          {home.hero.subtitle}
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="/articulos/"
-            class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors"
-          >
-            {home.hero.primaryCta}
-            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-          </a>
-          {social.instagram && (
-            <a
-              href={social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-400 text-gray-700 dark:border-gray-500 dark:text-gray-200 font-semibold hover:border-teal hover:text-teal transition-colors"
-            >
-              {home.hero.secondaryCta}
-            </a>
-          )}
-        </div>
-      </div>
-    </section>
-
-    <!-- Últimas publicaciones -->
-    <section class="max-w-6xl mx-auto px-4 py-16 sm:py-24 fade-in">
-      <div class="text-center mb-12">
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
-          {home.latest.heading}
-        </h2>
-        <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          {home.latest.subtitle}
-        </p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {articulos.map((articulo) => (
-          <ArticuloCard
-            title={articulo.data.title}
-            description={articulo.data.description}
-            date={articulo.data.date}
-            category={articulo.data.category}
-            coverImage={articulo.data.coverImage}
-            coverImageAlt={articulo.data.coverImageAlt}
-            slug={articulo.id}
-            readTime={articulo.readTime}
-          />
-        ))}
-      </div>
-      <div class="text-center mt-10">
+    <div class="relative max-w-6xl mx-auto px-4 py-24 sm:py-32 lg:py-40 text-center">
+      <h1 class="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+        {home.hero.title}{home.hero.highlight && <> <span class="text-teal">{home.hero.highlight}</span></>}
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+        {home.hero.subtitle}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
           href="/articulos/"
-          class="inline-flex items-center gap-2 text-teal font-medium hover:underline"
+          class="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-teal text-navy font-semibold hover:bg-teal-dark transition-colors"
         >
-          {home.latest.viewAllLabel}
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          {home.hero.primaryCta}
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
+        {social.instagram && (
+          <a
+            href={social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-400 text-gray-700 dark:border-gray-500 dark:text-gray-200 font-semibold hover:border-teal hover:text-teal transition-colors"
+          >
+            {home.hero.secondaryCta}
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Últimas publicaciones -->
+  <section class="max-w-6xl mx-auto px-4 py-16 sm:py-24 fade-in">
+    <div class="text-center mb-12">
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
+        {home.latest.heading}
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+        {home.latest.subtitle}
+      </p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {articulos.map((articulo) => (
+        <ArticuloCard
+          title={articulo.data.title}
+          description={articulo.data.description}
+          date={articulo.data.date}
+          category={articulo.data.category}
+          coverImage={articulo.data.coverImage}
+          coverImageAlt={articulo.data.coverImageAlt}
+          slug={articulo.id}
+          readTime={articulo.readTime}
+        />
+      ))}
+    </div>
+    <div class="text-center mt-10">
+      <a
+        href="/articulos/"
+        class="inline-flex items-center gap-2 text-teal font-medium hover:underline"
+      >
+        {home.latest.viewAllLabel}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <Newsletter />
+
+  <!-- Sobre nosotros -->
+  <section class="relative bg-gray-100 dark:bg-navy-light overflow-hidden fade-in">
+    <Background variant={home.about.background as any} />
+
+    <div class="relative max-w-4xl mx-auto px-4 py-16 sm:py-24 text-center">
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-6">
+        {home.about.heading}
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-2xl mx-auto" set:html={renderBold(home.about.paragraph1)} />
+      <p class="text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+        {home.about.paragraph2}
+      </p>
+      <a
+        href="/equipo/"
+        class="inline-flex items-center gap-2 mt-8 text-teal font-medium hover:underline"
+      >
+        {home.about.ctaLabel}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Síguenos (solo si hay redes sociales configuradas) -->
+  {hasSocialLinks && (
+    <section class="max-w-6xl mx-auto px-4 py-16 sm:py-24 text-center fade-in">
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-4">
+        {home.followUs.heading}
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 mb-10 max-w-lg mx-auto">
+        {home.followUs.subtitle}
+      </p>
+      <div class="flex justify-center gap-6">
+        {socialPlatforms.map(({ key, label }) => social[key] && (
+          <a
+            href={social[key]}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-col items-center gap-2 p-6 rounded-2xl bg-white dark:bg-navy-light shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+            aria-label={label}
+          >
+            <SocialIcon platform={key} class="w-10 h-10 text-gray-400 group-hover:text-teal transition-colors" />
+            <span class="text-sm font-medium text-gray-600 dark:text-gray-300">{label}</span>
+          </a>
+        ))}
       </div>
     </section>
-
-    <Newsletter />
-
-    <!-- Sobre nosotros -->
-    <section class="relative bg-gray-100 dark:bg-navy-light overflow-hidden fade-in">
-      <Background variant={home.about.background as any} />
-
-      <div class="relative max-w-4xl mx-auto px-4 py-16 sm:py-24 text-center">
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-6">
-          {home.about.heading}
-        </h2>
-        <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-2xl mx-auto" set:html={renderBold(home.about.paragraph1)} />
-        <p class="text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-          {home.about.paragraph2}
-        </p>
-        <a
-          href="/equipo/"
-          class="inline-flex items-center gap-2 mt-8 text-teal font-medium hover:underline"
-        >
-          {home.about.ctaLabel}
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </section>
-
-    <!-- Síguenos (solo si hay redes sociales configuradas) -->
-    {hasSocialLinks && (
-      <section class="max-w-6xl mx-auto px-4 py-16 sm:py-24 text-center fade-in">
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-4">
-          {home.followUs.heading}
-        </h2>
-        <p class="text-gray-500 dark:text-gray-400 mb-10 max-w-lg mx-auto">
-          {home.followUs.subtitle}
-        </p>
-        <div class="flex justify-center gap-6">
-          {socialPlatforms.map(({ key, label }) => social[key] && (
-            <a
-              href={social[key]}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex flex-col items-center gap-2 p-6 rounded-2xl bg-white dark:bg-navy-light shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
-              aria-label={label}
-            >
-              <SocialIcon platform={key} class="w-10 h-10 text-gray-400 group-hover:text-teal transition-colors" />
-              <span class="text-sm font-medium text-gray-600 dark:text-gray-300">{label}</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-  </main>
-
-  <Footer />
+  )}
 </BaseLayout>

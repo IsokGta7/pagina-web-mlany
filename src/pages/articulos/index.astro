@@ -1,7 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
 import ArticuloCard from '../../components/ArticuloCard.astro';
 import SearchBar from '../../components/SearchBar.astro';
 import { getCollection } from 'astro:content';
@@ -24,88 +22,84 @@ const categories = [articlesContent.list.allCategoriesLabel, ...categoriesData.i
 ---
 
 <BaseLayout title={articlesContent.list.heading} description="Explora nuestros artículos sobre ciencia, tecnología y medio ambiente. Divulgación científica en español.">
-  <Header />
-
-  <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
-    <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
-      <!-- Encabezado -->
-      <div class="text-center mb-10">
-        <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
-          {articlesContent.list.heading}
-        </h1>
-        <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
-          {articlesContent.list.subtitle}
-        </p>
-      </div>
-
-      <!-- Búsqueda -->
-      <div class="max-w-md mx-auto mb-8">
-        <SearchBar />
-      </div>
-
-      <!-- Filtro por categorías -->
-      <div class="flex flex-wrap justify-center gap-2 mb-10" role="group" aria-label="Filtrar por categoría">
-        {categories.map((cat) => (
-          <button
-            class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal hover:text-teal cursor-pointer data-[active=true]:bg-teal data-[active=true]:text-navy data-[active=true]:border-teal"
-            data-category={cat}
-            data-active={cat === articlesContent.list.allCategoriesLabel ? 'true' : 'false'}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <!-- Grid de artículos -->
-      <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-pagefind-body>
-        {allArticulos.map((articulo) => (
-          <div class="article-item" data-category={articulo.data.category}>
-            <ArticuloCard
-              title={articulo.data.title}
-              description={articulo.data.description}
-              date={articulo.data.date}
-              category={articulo.data.category}
-              coverImage={articulo.data.coverImage}
-              coverImageAlt={articulo.data.coverImageAlt}
-              slug={articulo.id}
-              readTime={articulo.readTime}
-            />
-          </div>
-        ))}
-      </div>
-
-      <!-- Mensaje sin resultados -->
-      <p id="no-results" class="hidden text-center text-gray-500 dark:text-gray-400 py-12">
-        {articlesContent.list.noResults}
+  <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16">
+    <!-- Encabezado -->
+    <div class="text-center mb-10">
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold text-navy dark:text-warm-white mb-3">
+        {articlesContent.list.heading}
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+        {articlesContent.list.subtitle}
       </p>
-    </section>
-  </main>
+    </div>
 
-  <Footer />
+    <!-- Búsqueda -->
+    <div class="max-w-md mx-auto mb-8">
+      <SearchBar />
+    </div>
 
-  <script is:inline define:vars={{ allLabel: articlesContent.list.allCategoriesLabel }}>
-    const buttons = document.querySelectorAll('.category-btn');
-    const items = document.querySelectorAll('.article-item');
-    const noResults = document.getElementById('no-results');
+    <!-- Filtro por categorías -->
+    <div class="flex flex-wrap justify-center gap-2 mb-10" role="group" aria-label="Filtrar por categoría">
+      {categories.map((cat) => (
+        <button
+          class="category-btn px-4 py-2 rounded-full text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal hover:text-teal cursor-pointer data-[active=true]:bg-teal data-[active=true]:text-navy data-[active=true]:border-teal"
+          data-category={cat}
+          data-active={cat === articlesContent.list.allCategoriesLabel ? 'true' : 'false'}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
 
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const category = btn.dataset.category;
+    <!-- Grid de artículos -->
+    <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-pagefind-body>
+      {allArticulos.map((articulo) => (
+        <div class="article-item" data-category={articulo.data.category}>
+          <ArticuloCard
+            title={articulo.data.title}
+            description={articulo.data.description}
+            date={articulo.data.date}
+            category={articulo.data.category}
+            coverImage={articulo.data.coverImage}
+            coverImageAlt={articulo.data.coverImageAlt}
+            slug={articulo.id}
+            readTime={articulo.readTime}
+          />
+        </div>
+      ))}
+    </div>
 
-        buttons.forEach((b) => b.dataset.active = 'false');
-        btn.dataset.active = 'true';
+    <!-- Mensaje sin resultados -->
+    <p id="no-results" class="hidden text-center text-gray-500 dark:text-gray-400 py-12">
+      {articlesContent.list.noResults}
+    </p>
+  </section>
 
-        let visibleCount = 0;
-        items.forEach((item) => {
-          const show = category === allLabel || item.dataset.category === category;
-          item.style.display = show ? '' : 'none';
-          if (show) visibleCount++;
+  <Fragment slot="after-footer">
+    <script is:inline define:vars={{ allLabel: articlesContent.list.allCategoriesLabel }}>
+      const buttons = document.querySelectorAll('.category-btn');
+      const items = document.querySelectorAll('.article-item');
+      const noResults = document.getElementById('no-results');
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const category = btn.dataset.category;
+
+          buttons.forEach((b) => b.dataset.active = 'false');
+          btn.dataset.active = 'true';
+
+          let visibleCount = 0;
+          items.forEach((item) => {
+            const show = category === allLabel || item.dataset.category === category;
+            item.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+          });
+
+          if (noResults) {
+            noResults.classList.toggle('hidden', visibleCount > 0);
+          }
         });
-
-        if (noResults) {
-          noResults.classList.toggle('hidden', visibleCount > 0);
-        }
       });
-    });
-  </script>
+    </script>
+  </Fragment>
 </BaseLayout>

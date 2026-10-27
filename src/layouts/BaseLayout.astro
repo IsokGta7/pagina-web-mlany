@@ -2,12 +2,16 @@
 import '../styles/global.css';
 import settings from '../data/settings.json';
 import CookieBanner from '../components/CookieBanner.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
   canonicalUrl?: string;
+  /** Classes for the <main> landmark that the skip link targets. */
+  mainClass?: string;
 }
 
 const siteName = settings.siteName || 'Ciensite';
@@ -17,6 +21,7 @@ const {
   description = `${siteName} — Ciencia para todos. Divulgación científica por estudiantes mexicanos.`,
   ogImage,
   canonicalUrl,
+  mainClass = 'flex-1 focus:outline-none',
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.netlify.app';
@@ -131,7 +136,15 @@ const colorOverrides = `:root {
       Saltar al contenido principal
     </a>
 
-    <slot />
+    <Header />
+    <slot name="before-main" />
+
+    <main id="main" tabindex="-1" class={mainClass}>
+      <slot />
+    </main>
+
+    <Footer />
+    <slot name="after-footer" />
 
     <CookieBanner />
 
