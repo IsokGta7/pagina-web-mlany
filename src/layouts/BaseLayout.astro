@@ -19,7 +19,7 @@ const {
   canonicalUrl,
 } = Astro.props;
 
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.mx';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.netlify.app';
 const canonical = canonicalUrl ?? Astro.url.href;
 
 // OG Image: use prop, then settings, then omit

@@ -2,7 +2,7 @@ import settings from '../data/settings.json';
 
 export async function GET({ site }) {
   const disallowPaths = settings.seo?.disallowPaths || [];
-  const baseUrl = site?.toString().replace(/\/$/, '') ?? 'https://ciensite.mx';
+  const baseUrl = site?.toString().replace(/\/$/, '') ?? 'https://ciensite.netlify.app';
 
   const lines = [
     'User-agent: *',

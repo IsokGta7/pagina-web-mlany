@@ -88,7 +88,7 @@ const metaDescription = seoDescription || description;
 const metaOgImage = seoOgImage || coverImage;
 
 // JSON-LD structured data
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.mx';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://ciensite.netlify.app';
 const ogImageAbsolute = metaOgImage.startsWith('http') ? metaOgImage : `${siteUrl}${metaOgImage}`;
 const structuredData = {
   '@context': 'https://schema.org',
