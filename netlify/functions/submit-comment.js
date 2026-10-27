@@ -111,6 +111,22 @@ async function tier2(text) {
   return { configured: false };
 }
 
+// A comment is auto-approved only when Tier 1 raised nothing and Tier 2
+// actually checked it and found nothing. If Tier 2 is not configured, or its
+// call failed, nobody has vetted the text, so it waits for a moderator.
+export function applyTier2(t1Flags, t2) {
+  if (!t2 || t2.configured === false) {
+    return { approved: false, flags: [...t1Flags, 'ai-moderation-not-configured'] };
+  }
+  if (t2.skip) {
+    return { approved: false, flags: [...t1Flags, 'ai-moderation-unavailable'] };
+  }
+  if (t2.flagged) {
+    return { approved: false, flags: [...t1Flags, ...(t2.flags || [])] };
+  }
+  return { approved: t1Flags.length === 0, flags: [...t1Flags] };
+}
+
 // Only sources Netlify itself sets are trusted here. `x-forwarded-for` is
 // deliberately ignored: a sender can prefix it with any address and Netlify
 // keeps that prefix, which would let them pick their own rate-limit bucket.
@@ -161,9 +177,6 @@ export default async (req, context) => {
   const t1 = tier1(cleanContent, cleanName);
   if (t1.reject) return bad(400, t1.reject);
 
-  let flags = t1.flags;
-  let approved = flags.length === 0;
-
   // Moderation cache: skip the AI call when we've moderated this exact text before.
   const modKey = await hashContent(`${cleanName}\n${cleanContent}`);
   let t2 = await getCachedModeration(modKey);
@@ -178,15 +191,7 @@ export default async (req, context) => {
     }
   }
 
-  if (t2 && t2.configured !== false) {
-    if (t2.skip) {
-      flags = flags.concat(['ai-moderation-unavailable']);
-      approved = false;
-    } else if (t2.flagged) {
-      flags = flags.concat(t2.flags);
-      approved = false;
-    }
-  }
+  const { approved, flags } = applyTier2(t1.flags, t2);
 
   if (cacheHit) flags.push('cached-moderation');
 
