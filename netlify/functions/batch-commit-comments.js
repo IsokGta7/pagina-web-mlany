@@ -11,6 +11,19 @@ import { listStagedComments, deleteStagedComment } from './_blobs.js';
 const REPO = 'IsokGta7/pagina-web-mlany';
 const BRANCH = 'master';
 
+// Each comment costs one GitHub blob request, plus three for the tree, commit
+// and ref. At 25 per run and one run every 5 minutes that stays under
+// GitHub's limits on content-creating requests (80 a minute, 500 an hour), so
+// a backlog drains over several runs instead of failing as one oversized batch
+// on every run.
+export const MAX_BATCH = 25;
+
+// Oldest first, so a backlog is committed in the order it arrived. Staged keys
+// start with the Date.now() of submission, so they sort chronologically.
+export function selectBatch(staged, max = MAX_BATCH) {
+  return [...staged].sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)).slice(0, max);
+}
+
 function ghHeaders(token) {
   return {
     Authorization: `Bearer ${token}`,
@@ -39,12 +52,17 @@ export default async () => {
     return new Response('Server misconfigured', { status: 500 });
   }
 
-  const staged = await listStagedComments();
-  if (staged.length === 0) {
+  const allStaged = await listStagedComments();
+  if (allStaged.length === 0) {
     return new Response('No staged comments', { status: 200 });
   }
 
-  console.log(`Batching ${staged.length} staged comment(s) into one commit`);
+  const staged = selectBatch(allStaged);
+  const left = allStaged.length - staged.length;
+  console.log(
+    `Batching ${staged.length} staged comment(s) into one commit` +
+      (left > 0 ? `; ${left} left for later runs` : '')
+  );
 
   // 1. Get current branch ref + base commit + base tree
   const ref = await gh(token, `/repos/${REPO}/git/refs/heads/${BRANCH}`);
