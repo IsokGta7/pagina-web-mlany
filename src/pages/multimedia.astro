@@ -16,7 +16,16 @@ type InstagramPost = { url: string };
 const videos: Video[] = multimedia.videos || [];
 const photos: Photo[] = multimedia.gallery || [];
 const instagramPosts: InstagramPost[] = multimedia.instagramPosts || [];
-const hasContent = videos.length > 0 || photos.length > 0 || instagramPosts.length > 0;
+// Audio capsule. The music credit renders only once its three fields are filled.
+const audio = {
+  title: 'Cápsula de audio',
+  description:
+    'Una cápsula de audio de poco más de dos minutos, grabada para acompañar y enriquecer el tema que trabajamos en este sitio. Escúchala directamente aquí.',
+  src: '/uploads/audio/audio-ciensite.mp3',
+  music: { title: '', author: '', url: '' },
+};
+const hasMusicCredit = Boolean(audio.music.title && audio.music.author && audio.music.url);
+const hasContent = true;
 const t = misc.multimedia;
 ---
 
@@ -29,6 +38,20 @@ const t = misc.multimedia;
       <p class="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
         {t.subtitle}
       </p>
+    </div>
+
+    <!-- Audio -->
+    <div class="max-w-2xl mx-auto mb-16 bg-white dark:bg-navy-light rounded-2xl shadow-sm p-6">
+      <h2 class="font-serif text-2xl font-bold text-navy dark:text-warm-white mb-3">{audio.title}</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">{audio.description}</p>
+      <audio controls preload="metadata" class="w-full" src={audio.src}>
+        Tu navegador no puede reproducir este audio. <a href={audio.src}>Descárgalo aquí</a>.
+      </audio>
+      {hasMusicCredit && (
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
+          Música de fondo: <a class="underline" href={audio.music.url} target="_blank" rel="noopener noreferrer">{audio.music.title}</a>, de {audio.music.author}.
+        </p>
+      )}
     </div>
 
     {!hasContent && (
